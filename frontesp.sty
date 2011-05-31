@@ -1,0 +1,63 @@
+	\def\titolocorso#1{\gdef\titolocorso{#1}}
+	\usepackage{color}
+	\def\degreeyear#1{\gdef\degreeyear{#1}}
+	\def\principaladviser#1{\gdef\principaladviser{#1}}
+	\def\firstreader#1{\gdef\firstreader{#1}}
+
+\renewcommand{\maketitle}
+{
+\begin{titlepage}%
+  \thispagestyle{empty}%
+  \addtolength{\footskip}{-4cm}
+  \addtolength{\textheight}{6cm}
+  \addtolength{\topmargin}{-1cm}
+  \addtolength{\hoffset}{0,75cm}
+  \addtolength{\textwidth}{2cm}
+  \let\footnotesize\small
+  \let\footnoterule\relax
+%  \vspace*{-25mm}
+  \begin{center}
+    \textsc{\Large UNIVERSIT\'A DEGLI STUDI DI CATANIA}\medskip\\
+    \medskip{\Large Facolt\`a di Ingegneria}\medskip\\
+   {\small Corso di Laurea in} \textsc{\titolocorso}\medskip\\
+  \rule{120mm}{0.01mm}\medskip\\
+  \bigskip\bigskip\bigskip\bigskip\bigskip
+    {\LARGE Tesi di Laurea} \par\bigskip\bigskip\bigskip
+    {\LARGE \@author} \par\bigskip\bigskip\bigskip
+   {\LARGE \bf \@title \par}
+ 
+\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip
+  \end{center}\par
+
+\begin{center}
+\begin{tabular}{|cl|cl|l|}
+&\qquad&\qquad&\qquad\qquad\qquad\qquad\qquad&{\large Relatore:}\\
+&&& & {\large \principaladviser}\\
+&&& & \\
+&&& &{\large Correlatore:}\\
+&&& & {\large \firstreader}\\
+\end{tabular}
+\end{center}
+
+\bigskip\bigskip
+  \begin{center}
+    \rule{120mm}{0.01mm}\\
+    {ANNO ACCADEMICO \degreeyear}
+
+  \end{center}
+  \end{titlepage}
+  \setcounter{footnote}{0}%
+}
+
+
+\def\dedica#1{\gdef\dedica{#1}}
+\newcommand{\makededica}
+{
+  \thispagestyle{empty}
+  \begin{flushright}
+  \textcolor{white}{.}\\
+  \vspace{4cm}
+  \dedica
+  \end{flushright}
+  \pagebreak 
+}

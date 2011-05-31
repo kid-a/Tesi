@@ -1,0 +1,65 @@
+\documentclass[12pt,a4paper,oneside,openright,titlepage,italian]{book}
+
+\usepackage[italian]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath} 
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{frontesp}
+\usepackage{listings}
+%\usepackage{fullpage}
+
+\renewcommand{\thesection}{\arabic{section}}
+\addtolength{\voffset}{-0,5cm}
+\addtolength{\textheight}{1cm}
+\setlength{\parindent}{0pt}
+\frenchspacing
+\linespread{2.0}
+
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thechapter .\thesection\ #1}}
+\renewcommand{\subsectionmark}[1]{\markright{\thechapter .\thesubsection\ #1}}
+\fancyhf{}
+\lhead{\rightmark}
+\chead{}
+\rhead{\bfseries\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+%\setlength{\headheight}{15pt}
+\setlength{\headheight}{40pt}
+\fancypagestyle{plain}{\fancyhead{}\renewcommand{\headrulewidth}{0pt}}
+\fancyhead[RO]{\textbf{\thepage}}
+\fancyhead[LO]{\nouppercase{\rightmark}}
+
+\begin{document}
+%\addtolength{\oddsidemargin}{+1,3cm}
+\addtocounter{tocdepth}{+1}
+
+\input{frontespizio}
+
+%% \dedica{\emph{Don't know much about geography} \\\emph{Don't know much trigonometry} \\\emph{Don't know much about algebra} \\\emph{Don't know what a slide rule is for} \\\emph{But I do know that one and one is two}\\\emph{And if this one could be with you}\\\emph{What a wonderful world this would be}\\Sam Cooke}
+\dedica {The last good thing written in C was Franz Schubert's Symphony number 9.\\
+  \emph{Erwin Dieterich}}
+\makededica
+\tableofcontents
+\listoffigures
+\lstlistoflistings
+\newpage
+
+\input{introduzione}
+%% \input{cap1}
+%% \input{cap2}
+%% \input{cap3}
+%% \input{cap4}
+%% \input{cap5}
+%% \input{conclusioni}
+%% \appendix
+%% \input{beacon_erl}
+\input{ringraziamenti}
+%\input{app_a}
+%\input{app_software}
+%% \input{bibliografia}
+\end{document}
