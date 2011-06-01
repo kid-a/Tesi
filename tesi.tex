@@ -40,9 +40,21 @@
 
 \input{frontespizio}
 
-\dedica {The last good thing written in C was Franz Schubert's Symphony number 9.\\
-  \emph{Erwin Dieterich}}
+%% \dedica {The last good thing written in C was Franz Schubert's Symphony number 9.\\
+%%   \emph{Erwin Dieterich}}
+
+
+\dedica {
+  Little darling, the smiles returning to the faces\\
+  Little darling, it seems like years since it's been here\\
+  Here comes the sun, here comes the sun\\
+  and I say it's all right\\
+  \emph {George Harrison}
+}
+
+\begin{small}
 \makededica
+\end{small}
 \tableofcontents
 \listoffigures
 \lstlistoflistings
@@ -60,5 +72,8 @@
 \input{ringraziamenti}
 %\input{app_a}
 %\input{app_software}
-%% \input{bibliografia}
+% Bibliography with BibTeX
+%\addcontentsline{toc}{section}{Bibliography}
+\bibliographystyle{splncs}\bibliography{biblio}
+%%\input{bibliografia}
 \end{document}
