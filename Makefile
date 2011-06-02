@@ -1,7 +1,7 @@
 FILE=tesi
 
 all:
-	latex $(FILE).tex
+	pdflatex $(FILE).tex
 	pdflatex $(FILE).tex
 	xpdf $(FILE).pdf
 
