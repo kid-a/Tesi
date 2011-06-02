@@ -2,9 +2,6 @@ FILE=tesi
 
 all:
 	latex $(FILE).tex
-	bibtex $(FILE)
-	latex $(FILE).tex
-	latex $(FILE).tex
 	pdflatex $(FILE).tex
 	xpdf $(FILE).pdf
 
