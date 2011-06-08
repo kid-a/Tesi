@@ -6,7 +6,7 @@ all:
 	xpdf $(FILE).pdf
 
 clean:
-	-rm *.aux *.log *.nav *.out *.snm *.toc *.pdf
+	-rm *.aux *.log *.nav *.out *.snm *.toc *.pdf *~
 
 pdf:
 	pdflatex ${file}.tex
