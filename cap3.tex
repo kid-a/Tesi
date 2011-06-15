@@ -1,5 +1,35 @@
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Il datacenter}\label{sec:datacenter}
+Il datacenter \`e il componente del sistema delegato alla elaborazione 
+del flusso informativo generato dai dispositivi \emph{di campo}.
+%
+Si tratta di un sistema software costituito da diverse \emph{erlang 
+applications}\cite{erlapplication}, ciascuna delle quali implementa 
+una o pi\`u delle funzionalit\`a tra quelle riportate di seguito:
+%
+\begin{itemize}
+  \item decodifica dei \emph{dati di campo}
+  \item stima di grandezze \emph{aggregate}
+  \item memorizzazione dei dati su \emph{memoria persistente}
+  \item rilevamento di \emph{condizioni anomale} e generazione di \emph{allarmi}
+  \item accesso allo \emph{stato} degli impianti
+  \item accesso ai \emph{dati storici} degli impianti
+\end{itemize}
+%
+%% quindi il datacenter e` un componente cruciale: deve mantenere i dati 
+%% costantemente aggiornati, deve fornire dei servizi mediante i quali accedere ai 
+%% dati, deve essere 'live' h24, 
+
+%% proprieta` desiderabili: liveness, transactions?, robustness
+%% scelta della piattaforma: erlang + otp
+
+%% proprieta` desiderabili
+
+%% scelta della tecnologia
+\section{Breve introduzione a Erlang/OTP}
+
+
+
 %% il datacenter: responsabilita` -> decodifica lettura
 %%                                -> gestione database
 %%                                -> produzione dati aggregati
