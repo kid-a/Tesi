@@ -1,30 +1,54 @@
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Il datacenter}\label{sec:datacenter}
-Il datacenter \`e il componente del sistema delegato alla elaborazione 
+Il datacenter \`e il componente del sistema responsabile della elaborazione 
 del flusso informativo generato dai dispositivi \emph{di campo}.
 %
-Si tratta di un sistema software costituito da diverse \emph{erlang 
-applications}\cite{erlapplication}, ciascuna delle quali implementa 
-una o pi\`u delle funzionalit\`a tra quelle riportate di seguito:
+Si tratta di un sistema software /emph{online} costituito da 
+diverse applicazioni, ciascuna delle quali implementa una o pi\`u delle 
+funzionalit\`a tra quelle riportate di seguito:
 %
 \begin{itemize}
   \item decodifica dei \emph{dati di campo}
   \item stima di grandezze \emph{aggregate}
   \item memorizzazione dei dati su \emph{memoria persistente}
   \item rilevamento di \emph{condizioni anomale} e generazione di \emph{allarmi}
-  \item accesso allo \emph{stato} degli impianti
-  \item accesso ai \emph{dati storici} degli impianti
+  \item fornire accesso allo \emph{stato} degli impianti
+  \item fornire accesso ai \emph{dati storici} degli impianti
 \end{itemize}
 %
-%% quindi il datacenter e` un componente cruciale: deve mantenere i dati 
-%% costantemente aggiornati, deve fornire dei servizi mediante i quali accedere ai 
-%% dati, deve essere 'live' h24, 
 
-%% proprieta` desiderabili: liveness, transactions?, robustness
-%% scelta della piattaforma: erlang + otp
-
-%% proprieta` desiderabili
-
+%
+Dall'elenco delle funzionalit\`a implementate, \`e facile osservare come il
+datacenter ricopra un ruolo fondamentale all'interno del sistema di monitoraggio: 
+si tratta di un componente \emph{critico}, un suo malfunzionamento 
+(ad esempio uno \emph{shutdown} dovuto a un \emph{crash}) puo` avere effetti che 
+vanno dalla semplice interruzione del servizio di accesso ai dati degli impianti 
+fino alla mancata decodifica dei dati provenienti dai dispositivi di campo e, 
+quindi, al blocco \emph{de facto} dell'intero sistema di monitoraggio.
+%
+Per questo motivo, durante la prima fase della progettazione, sono stati 
+individuati, oltre ai gi\`a elencati requisiti funzionali, un insieme di 
+\emph{propriet\`a} di cui il datacenter avrebbe dovuto godere. Tali propriet\`a 
+sono:
+%
+\begin{itemize}
+\item \emph{liveness}, i.e. una volta verificatosi un evento di interesse, 
+il datacenter deve, prima o poi, gestirlo; tale propriet\`a serve a garantire, ad 
+esempio, che ogni \emph{batch} di dati provenienti dai dati di campo venga, 
+presto o tardi, processato.
+%
+\item \emph{high availability}, i.e. il datacenter deve essere costantemente 
+in esecuzione, salvo \emph{downtime} programmati per operazioni quali 
+aggiornamento release, etc.
+%
+\item \emph{robustness}, i.e. l'esecuzione del datacenter non deve essere 
+compromessa da situazioni anomale quali, ad esempio, la ricezione di dati 
+\emph{malformati} da parte di dispositivi di campo in avaria. Il datacenter 
+deve essere in grado di rilevare potenziali anomalie.%% e segnalarle?
+%
+\item \emph{scalability}, i.e.
+%
+\end{itemize}
 %% scelta della tecnologia
 \section{Breve introduzione a Erlang/OTP}
 
