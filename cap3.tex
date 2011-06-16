@@ -18,7 +18,7 @@ funzionalit\`a tra quelle riportate di seguito:
 %
 
 %
-Dall'elenco delle funzionalit\`a implementate, \`e facile osservare come il
+Dall'elenco delle funzionalit\`a, \`e facile osservare come il
 datacenter ricopra un ruolo fondamentale all'interno del sistema di monitoraggio: 
 si tratta di un componente \emph{critico}, un suo malfunzionamento 
 (ad esempio uno \emph{shutdown} dovuto a un \emph{crash}) puo` avere effetti che 
@@ -46,22 +46,36 @@ compromessa da situazioni anomale quali, ad esempio, la ricezione di dati
 \emph{malformati} da parte di dispositivi di campo in avaria. Il datacenter 
 deve essere in grado di rilevare potenziali anomalie.%% e segnalarle?
 %
-\item \emph{scalability}, i.e.
+\item \emph{scalability}, i.e. le prestazioni del datacenter non devono 
+decrescere all'aumentare del numero di impianti, e, quindi del numero di 
+flussi informativi, da monitorare. %% e se un giorno volessi distribuire il datacenter?
 %
 \end{itemize}
-%% scelta della tecnologia
-\section{Breve introduzione a Erlang/OTP}
+%
 
+%
+Tali propriet\`a hanno fortemente condizionato il successivo \emph{step} di
+progettazione, ovvero la scelta della \emph{tecnologia} su cui costruire il 
+datacenter.
+%
+Tale scelta \`e ricaduta su Erlang/OTP (un acronimo per \emph{Open Telecom 
+Platform}).
+%
 
+%
+Questo capitolo \`e organizzato come segue: il prossimi due paragrafi
+introdurranno Erlang/OTP e si soffermeranno sui motivi che ne fanno la scelta 
+tecnologica pi\`u adatta. Successivamente, a partire dal paragrafo \ref{datacenter-arch} 
+verr\`a descritta l'architettura del datacenter.
 
-%% il datacenter: responsabilita` -> decodifica lettura
-%%                                -> gestione database
-%%                                -> produzione dati aggregati
-%%                                -> produzione allarmi
-%%                                -> produzione report sullo stato del sistema
-%%                                
+\section{Breve introduzione a Erlang/OTP}%%
+
+\section{Perch\`e OTP}
 %% brevissima introduzione a erlang che spieghi il perche` della scelta
+
 %% architettura: insieme di erlang applications:
+\section{L'architettura del datacenter}
+\label{datacenter-arch}
 \section{L'applicazione \emph{sysconf}}
 \section{L'applicazione \emph{datamanager}}
 \subsection{Il \emph{gen\_server filter}}
