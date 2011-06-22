@@ -124,33 +124,59 @@ invece mostra cosa accade al variare della temperatura superficiale del modulo.
 
 %
 \subsection{Le stringhe fotovoltaiche}
-Nei campi fotovoltaici, i singoli moduli sono tipicamente
-raggruppati a formare delle \emph{stringhe}.
+Per \emph{stringa fotovoltaica} si intende un insieme di moduli connessi in \emph{serie}, 
+come mostrato in figura \ref{stringa}.
 %
-Per \emph{stringa fotovoltaica} si intende un insieme di moduli 
-connessi in \emph{serie}. La connessione avviene mediante apposite 
-\emph{junction box} generalmente collocate sul retro dei moduli.
+La connessione in serie dei moduli \`e resa possibile da apposite \emph{junction box}, 
+generalmente collocate sul retro dei moduli.
+%
+
 %
 \begin{figure}[!h]
 \centering
-\includegraphics[width=190pt]{img/pv-junction-box.jpg}
+\includegraphics[width=350pt]{img/pv-string.png}
+\caption{Connessione in serie di moduli fotovoltaici}
+\label{stringa}
+\end{figure}
+%
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=180pt]{img/pv-junction-box.jpg}
 \caption{Junction box}
 \end{figure}
 %
-La connessione in serie implica che una eventuale differenza di 
-performance tra moduli appartenenti alla stessa avr\`a come effetto 
-un peggioramento di produzione per tutti i moduli della stringa.
+
+%
+\`E importante evidenziare come connettere i moduli in serie condizioni le 
+prestazioni dell'intera stringa: la legge di Ohm, infatti, impone che ogni 
+modulo connesso in serie venga attraversato dalla stessa quantit\`a di corrente;
+per cui, un degrado, anche temporaneo, delle prestazioni o, peggio, il 
+malfunzionamento di uno dei moduli, provoca un peggioramento di produzione 
+per tutti i moduli della stringa.
 %
 Tale fenomeno, noto come \emph{mismatch di corrente}, pu\`o manifestarsi,
-ad esempio, nel caso in cui uno o pi\`u moduli siano meno soleggiati 
-di altri.
+ad esempio, nel caso in cui uno o pi\`u moduli siano, anche solo parzialmente, 
+\emph{ombreggiati}, come mostrato in figura \ref{ombreggiamento}.
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=300pt]{img/fv-ombreggiamento.png}
+\caption{Ombreggiamento parziale di una stringa}
+\label{ombreggiamento}
+\end{figure}
+%
 
+%
+Per limitare il manifestarsi di questo fenomeno, durante la fase di progettazione 
+dei campi fotovoltaici vengono considerati fattori quali \Item{i} l'orientamento 
+dei moduli della stringa, \Item{ii} la presenza di oggetti che possano produrre 
+ombreggiamenti, \Item{iii} la distanza tra i moduli, \Item{iv} le caratteristiche 
+climatiche della zona che ospiter\`a il campo fotovoltaico.
+%
 
-
-
-
-
-
+%
+\subsection{Gli inverter}
 
 
 
@@ -163,7 +189,12 @@ di altri.
 
 
 
-
+\begin{figure}[!h]
+\centering
+\includegraphics[width=300pt]{img/impianto-grid-connect.jpg}
+\caption{Impianto grid-connected}
+\label{impiantogridconnect}
+\end{figure}
 
 
 
