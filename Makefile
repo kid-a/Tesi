@@ -3,7 +3,7 @@ FILE=tesi
 all:
 	pdflatex $(FILE).tex
 	pdflatex $(FILE).tex
-	xpdf $(FILE).pdf
+	evince $(FILE).pdf &
 
 clean:
 	-rm *.aux *.log *.nav *.out *.snm *.toc *.pdf *~
