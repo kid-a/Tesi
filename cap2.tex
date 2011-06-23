@@ -2,6 +2,96 @@
 \chapter{Architettura del sistema}
 %% prima di tutto: cosa misurare?
 %% modello concettuale dell'impianto fotovoltaico
+
+\section{Impianti di Elevata Potenza}
+
+\subsection{Definizione delle grandezze}
+
+\begin{enumerate}
+%%
+\item Dati Ambientali:
+\begin{itemize}
+\item $T, (\deg C)$, Temperatura ambiente.
+\item $R, (W/m^2)$, Irraggiamento.
+\end{itemize}
+%%
+%%
+\item Dimensionamento dell'impianto:
+\begin{itemize}
+\item $NI$, numero di inverter.
+\item $NS_k, k \in \{1, \dots, NI\}$, numero di stringhe dell'inverter $k$.
+\item $\eta _{k}, k \in \{1, \dots, NI\}$, rendimento in potenza
+  dell'inverter $k$ (rapporto tra
+  potenza in uscita e potenza in ingresso).
+\item $NP_{j,k}, k \in \{1, \dots, NI\}, j \in \{1, \dots, NS_k\}$, numero
+  di pannelli della stringa $j$ legata all'inverter $k$.
+\item $\mu _{i,j,k}, k \in \{1, \dots, NI\}, j \in \{1, \dots, NS_k\}, i \in
+  \{1, \dots, NP_{j,k}\}$, rendimento in potenza del pannello $i$ della stringa
+  $j$ dell'inverter $k$ (rapporto tra  potenza in uscita e irraggiamento).
+\item $S _{i,j,k}, k \in \{1, \dots, NI\}, j \in \{1, \dots, NS_k\}, i \in
+  \{1, \dots, NP_{j,k}\}, (m^2)$, Superficie del pannello $i$ della stringa
+  $j$ dell'inverter $k$.
+\end{itemize}
+%%
+%%
+\item Valori misurati a valle del quadro di AC:
+\begin{itemize}
+%%
+\item$E_O, (KWh)$, Energia attiva totale prodotta.
+\item$P_O, (KW)$, Potenza attiva.
+\item$PR_O, (KW)$, Potenza reattiva.
+\item$V_O, (V)$, Tensione.
+\item$I_O, (A)$, Corrente.
+\item$PF_O, (adimensionale)$, Sfsamento (power factor o $cos \phi$).
+%%
+\end{itemize}
+%%
+%%
+\item Valori misurati a valle dell'inverter $k$:
+\begin{itemize}
+%%
+\item$Iout_{k}, (A)$, Corrente generata.
+%%
+\end{itemize}
+%%
+%%
+\item Valori \textbf{calcolati} per l'inverter $k$:
+\begin{itemize}
+%%
+\item$Vout_{k} = V_O, (V)$, Tensione generata.
+\item$Pout_{k} = Vout_{k} \cdot Iout_{k}  \cdot PF_O, (KW)$ Potenza
+  (attiva) generata
+\item$Pin_{k} = \frac{Pout_k}{\eta _k}, (KW)$, Potenza in ingresso
+  all'inverter generata dalle stringhe.
+%%
+\item$Vin_{k} = \frac{Pin_k}{\sum_{j=1}^{NS_k}{Is_{j, k}}}, (V)$, Tensione
+  in ingresso all'inverter
+  calcolata sulla base della corrente prodotta dalle stringhe.
+%%
+\end{itemize}
+%%
+%%
+\item Valori misurati a valle della stringa $j, k$:
+\begin{itemize}
+%%
+\item$Is_{j, k}, (A)$, Corrente generata dalla stringa.
+%%
+\end{itemize}
+%%
+%%
+\item Valori \textbf{calcolati} per la stringa $j, k$:
+\begin{itemize}
+%%
+\item$Vs_{j, k} = Vin_{k}, \forall k, (V)$, Tensione generata da ogni stringa.
+\item$Ps_{j, k} = Vs_{j,k} \cdot Is_{j,k}, (KW)$, Potenza generata da ogni
+  stringa.
+%%
+\end{itemize}
+\end{enumerate}
+%%
+
+%%
+
 %% misure rilevate 
 %% misure stimate 
 

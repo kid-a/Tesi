@@ -51,7 +51,7 @@ macchinari il cui compito \`e quello di trasformare l'energia prodotta dai modul
 in una forma tale che possa essere ceduta alla rete di distribuzione. Infine, tra 
 gli inverter e la rete, il GSE provvede all'installazione di un \emph{contatore 
 bidirezionale}, il cui scopo \`e quello di quantificare la produzione dell'impianto.
-%
+%% un impianto si caratterizza per la quantita` di energia di picco
 \begin{figure}[!h]
 \centering
 \includegraphics[width=350pt]{img/impianto-grid-connect.jpg}
@@ -69,7 +69,7 @@ in rete pu\`o essere prelevata successivamente per i propri consumi.
 
 %
 \subsection{I moduli fotovoltaici}
-I moduli fotovoltaici sono gli elementi base di ogni impianto. 
+I moduli fotovoltaici sono gli elementi produttivi di un impianto. 
 Si tratta di dispositivi costituiti da \emph{celle} di materiale 
 \emph{semiconduttore}, caratterizzato quindi da un \emph{band gap} 
 di dimensioni tali per cui 
@@ -247,7 +247,7 @@ subire delle degradazioni.
 Gli inverter progettati specificatamente per il fovoltaico presentano una gamma 
 di funzionalit\`a che va oltre la sola trasformazione di corrente continua 
 in alternata. Essi, infatti, sono spesso dotati di particolari sistemi di 
-controllo, come il \emph{maximum power point tracker} che regolano la tensione 
+controllo, come il \emph{maximum power point tracker} (MPPT) che regolano la tensione 
 di stringa in modo tale da estrarre dai moduli la massima potenza disponibile 
 in qualsiasi condizione di irraggiamento.
 %
@@ -256,12 +256,52 @@ in qualsiasi condizione di irraggiamento.
 Opzionalmente, gli inverter possono anche essere provvisti di un \emph{data logger}, 
 i.e. un dispositivo che registra, nel tempo, i valori di grandezze di interesse quali 
 correnti, tensioni, potenze ed energia prodotta.
+% di notte gli inverter si spengono
+
+%
+\subsection{Il problema del rifasamento}
+%
+In regime di corrente alternata, la potenza elettrica $(S)$ \`e il risultato della 
+somma di due componenti vettoriali: una \emph{attiva} $(P)$, traformabile in 
+\emph{lavoro} e una \emph{reattiva} $(Q)$.
+%
+La presenza della componente reattiva \`e il diretto risultato dell'azione delle 
+reattanze presenti in un circuito, i.e. induttori e/o condensatori, le quali 
+provocano uno \emph{sfasamento} tra corrente e tensione, rappresentato in 
+figura \ref{potenzaattivareattiva} dall'angolo $\varphi$.
 %
 
 %
+\begin{figure}[!h]
+\centering
+\includegraphics[width=250pt]{img/apparent-power.png}
+\caption{Rappresentazione vettoriale di potenza attiva e reattiva}
+\label{potenzaattivareattiva}
+\end{figure}
+%
+Bench\'e si tratti di una componente inutilizzabile, la presenza della potenza 
+reattiva va tenuta in considerazione nel dimensionamento dei sistemi di 
+distribuzione. \`E per questo motivo che il gestore della rete elettrica in 
+bassa tensione impone dei limiti circa le quantit\`a di potenza reattiva 
+che le utenze sono autorizzate a scambiare con la rete stessa.
+%
+
+%
+Per rispettare tali limiti, indicati in \cite{criteriallacciamento}, gli impianti 
+fotovoltaici possono essere dotati di sistemi di \emph{rifasamento}, posti 
+tra gli inverter e il contatore di scambio, il cui scopo \`e l'azzeramento 
+dell'angolo $\varphi$.
+%
+
+%
+\section{Grandezze ed eventi di interesse}
+
+%% cosa monitorare: tensioni, correnti, potenze, energie
+%% cosa monitorare: degradazione delle performance dei singoli componenti
 
 
-%% connessione alla rete
+
+
 
 %% architettura tipica di un impianto fotovoltaico
 %% quali informazioni si vogliono produrre?
