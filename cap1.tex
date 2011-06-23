@@ -18,7 +18,7 @@ ricarica di dispositivi alimentati a batteria.
 %
 
 %
-Iniziamo la panoramica sugli impianti fotovolatici partendo dal fenomeno
+Iniziamo la panoramica sugli impianti fotovoltaici partendo dal fenomeno
 che sta alla base del loro funzionamento: l'effetto fotovoltaico.
 %
 
@@ -42,17 +42,42 @@ l'energia insita nella radiazione luminosa in energia elettrica.
 
 %
 \section{Architettura degli impianti grid-connected}
+Gli impianti fotovoltaici grid connected, detti anche \emph{campi fotovoltaici}, 
+sono costituiti da un insieme di dispositivi \emph{in cascata}, come mostrato in 
+figura \ref{impiantogridconnect}: \emph{a monte} di tutto si trovano i \emph{moduli 
+fotovoltaici}, ovvero i dispositivi che, sfruttando l'effetto fotovoltaico, 
+producono energia elettrica. \emph{A valle} di questi, troviamo gli \emph{inverter}, 
+macchinari il cui compito \`e quello di trasformare l'energia prodotta dai moduli 
+in una forma tale che possa essere ceduta alla rete di distribuzione. Infine, tra 
+gli inverter e la rete, il GSE provvede all'installazione di un \emph{contatore 
+bidirezionale}, il cui scopo \`e quello di quantificare la produzione dell'impianto.
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=350pt]{img/impianto-grid-connect.jpg}
+\caption{Schema di impianto grid-connected con scambio sul posto}
+\label{impiantogridconnect}
+\end{figure}
+%
+
+%
+Come gi\`a anticipato, gli impianti grid-connected immettono direttamente in rete 
+l'energia prodotta. Per questo tipo di impianti, il GSE prevede uno schema di compensazione 
+noto come \emph{scambio sul posto}\cite{scambioposto}, secondo cui l'energia immessa 
+in rete pu\`o essere prelevata successivamente per i propri consumi.
+%
+
+%
 \subsection{I moduli fotovoltaici}
 I moduli fotovoltaici sono gli elementi base di ogni impianto. 
-Si tratta di dispositivi costituiti da \emph{fette} di materiale 
+Si tratta di dispositivi costituiti da \emph{celle} di materiale 
 \emph{semiconduttore}, caratterizzato quindi da un \emph{band gap} 
 di dimensioni tali per cui 
 %
 \begin{itemize}
 \item a seguito dell'apporto energetico fornito dalla radiazione luminosa, 
       gli elettroni riescono a \emph{saltare} dalla banda di valenza a 
-      quella di conduzione
-      \footnote{ci\`o non sarebbe possibile in un \emph{isolante}}
+      quella di conduzione\footnote{ci\`o non sarebbe possibile in un \emph{isolante}}
 %
 \item gli elettroni che effettuano il \emph{salto} nella banda di conduzione 
       non vengono neutralizzati
@@ -120,6 +145,7 @@ invece mostra cosa accade al variare della temperatura superficiale del modulo.
 \label{caratteristica_modulo_fv}
 \end{figure}
 %% parlare della resistenza dei moduli e del decadimento delle prestazioni?
+%% parlare dell'effetto dell'orientamento dei moduli rispetto alle prestazioni?
 %
 
 %
@@ -175,29 +201,67 @@ ombreggiamenti, \Item{iii} la distanza tra i moduli, \Item{iv} le caratteristich
 climatiche della zona che ospiter\`a il campo fotovoltaico.
 %
 
+% dire che piu` stringhe possono essere collegate in parallelo
 %
 \subsection{Gli inverter}
+La corrente continua prodotta dalle stringhe non pu\`o essere direttamente
+immessa in rete. Si rendono necessari dei dispositivi, detti \emph{inverter}, 
+in grado di trasformare la corrente continua in corrente alternata, alla 
+stessa frequenza di quella della rete di distribuzione.
+%
 
+%
+Nel contesto di un campo fotovoltaico, gli inverter sono quindi collocati a 
+giunzione delle stringhe con la rete di distribuzione esterna. 
+%
+Come intuibile, si tratta dei componenti pi\`u complessi e critici degli 
+impianti fotovoltaici: una loro avaria pu\`o compromettere il processo di 
+distribuzione dell'energia prodotta dai moduli.
+%
 
-
-
-
-
-%% inverter
-%% connessione alla rete
-
-
-
-
+%
+%
 \begin{figure}[!h]
 \centering
-\includegraphics[width=300pt]{img/impianto-grid-connect.jpg}
-\caption{Impianto grid-connected}
-\label{impiantogridconnect}
+\includegraphics[width=300pt]{img/pv-inverter.jpg}
+\caption{Inverter fotovoltaico}
+%%\label{ombreggiamento}
 \end{figure}
+%
+Tra i dati di targa di un inverter, particolare importanza riveste la sua 
+\emph{efficienza}, definita come il rapporto tra l'energia in uscita 
+(ceduta dall'inverter alla rete di distribuzione) e l'energia in ingresso 
+(prodotta dalle stringhe).
+%
+Il valore di efficienza di un inveter non \`e determinato solo dalla 
+non idealit\`a del processo di trasfomazione: parte dell'energia in ingresso, 
+infatti, viene utilizzata dallo stesso inverter come alimentazione.
+%
+Gli inverter oggi presenti in commercio sono caratterizzati da valori tipici di
+efficienza superiori al 95\%. Tuttavia, \`e da tenere in conto che l'efficienza 
+di un inverter, a causa dell'effetto combinato di tempo e usura, tende a 
+subire delle degradazioni.
+%
+
+%
+Gli inverter progettati specificatamente per il fovoltaico presentano una gamma 
+di funzionalit\`a che va oltre la sola trasformazione di corrente continua 
+in alternata. Essi, infatti, sono spesso dotati di particolari sistemi di 
+controllo, come il \emph{maximum power point tracker} che regolano la tensione 
+di stringa in modo tale da estrarre dai moduli la massima potenza disponibile 
+in qualsiasi condizione di irraggiamento.
+%
+
+%
+Opzionalmente, gli inverter possono anche essere provvisti di un \emph{data logger}, 
+i.e. un dispositivo che registra, nel tempo, i valori di grandezze di interesse quali 
+correnti, tensioni, potenze ed energia prodotta.
+%
+
+%
 
 
-
+%% connessione alla rete
 
 %% architettura tipica di un impianto fotovoltaico
 %% quali informazioni si vogliono produrre?
