@@ -51,6 +51,19 @@ macchinari il cui compito \`e quello di trasformare l'energia prodotta dai modul
 in una forma tale che possa essere ceduta alla rete di distribuzione. Infine, tra 
 gli inverter e la rete, il GSE provvede all'installazione di un \emph{contatore 
 bidirezionale}, il cui scopo \`e quello di quantificare la produzione dell'impianto.
+%
+
+%
+Comunemente, gli impianti di questo tipo sono caratterizzati principalmente dalla 
+loro \emph{potenza di picco}, i.e. la massima potenza che essi sono in grado di 
+erogare. Sulla base di tale valore, \`e possibile effettuare una classificazione
+di questi sistemi, secondo quanto riportato in \cite{castaner02}:
+%
+\begin{itemize}
+\item impianti di \emph{piccole dimensioni}: 1 $\sim$  10 kWp
+\item impianti di \emph{medie dimensioni}: 10 $\sim$ 500 kWp
+\item impianti di \emph{grandi dimensioni}: 500 $\sim$ MWp 
+\end{itemize}
 %% un impianto si caratterizza per la quantita` di energia di picco
 \begin{figure}[!h]
 \centering
@@ -86,7 +99,14 @@ di dimensioni tali per cui
 %
 La presenza di \emph{portatori di carica} nella banda di conduzione 
 fa si che il modulo fotovoltaico, una volta connesso ad un conduttore 
-esterno, si comporti come un \emph{generatore di corrente}\cite{bellini09}.
+esterno, si comporti come un \emph{generatore di corrente}\cite{castaner02}.
+%
+La ricerca di un modello matematico per i moduli fotovoltaici \`e un problema 
+ampiamente trattato in letteratura: le soluzioni proposte vanno dal modello 
+estremamente semplice\cite{bellini09}, a modelli complessi, 
+che tengono conto di fattori quali variazioni di irraggiamento e 
+ombreggiature\cite{patel08}.
+
 %
 \begin{figure}[!h]
 \centering
@@ -200,6 +220,10 @@ dei moduli della stringa, \Item{ii} la presenza di oggetti che possano produrre
 ombreggiamenti, \Item{iii} la distanza tra i moduli, \Item{iv} le caratteristiche 
 climatiche della zona che ospiter\`a il campo fotovoltaico.
 %
+Alternativamente, il mismatch pu\`o essere limitato mediante l'utilizzo di 
+controllori \emph{module-level} e/o di topologie di connessione dei moduli 
+alternative alla serie\cite{roman06},\cite{sung09}.
+%
 
 % dire che piu` stringhe possono essere collegate in parallelo
 %
@@ -296,21 +320,39 @@ dell'angolo $\varphi$.
 %
 \section{Il problema del monitoraggio}
 Terminata la breve panoramica sugli impianti fotovoltaici, introduciamo il 
-problema alla base del presente lavoro di tesi: il monitoraggio degli impianti 
-fotovoltaici.
+problema oggetto del presente lavoro di tesi: il monitoraggio degli 
+impianti fotovoltaici.
 %
 
 %
 Il problema del monitoraggio pu\`o essere formulato mutuando concetti e 
-terminologia dalla disciplina del \emph{controllo dei processi industriali}: 
-la produzione di energia elettrica mediante moduli fotovoltaici pu\`o essere
+terminologia dal \emph{controllo dei processi industriali}: 
+la produzione di energia elettrica mediante fotovoltaico pu\`o essere
 modellata, infatti, come un \emph{processo continuo} caratterizzato dalle 
 seguenti \emph{variabili di stato}:
 %
 \begin{itemize}
-
+\item la corrente che attraversa ogni singola stringa
+\item la potenza in ingresso ad ogni inverter
+\item la potenza in uscita ad ogni inverter
+\item la potenze attive e reattive scambiate con la rete di distribuzione
 \end{itemize}
+%
 
+%
+
+
+
+
+
+\begin{equation}
+  N_{sG} V_{mMr} N_{pG} I_{mMr} (PSH) = E_{DC}
+\end{equation}
+
+%% V_{mMr} e I_{mMr} sono tensione e corrente al MPP (standard test conditions)
+%% N_{sG} numero di moduli in serie
+%% N_{pG} numero di serie
+%% PSH peak solar hours
 
 
 %% cosa monitorare: tensioni, correnti, potenze, energie
