@@ -325,29 +325,87 @@ impianti fotovoltaici.
 %
 
 %
-Il problema del monitoraggio pu\`o essere formulato mutuando concetti e 
-terminologia dal \emph{controllo dei processi industriali}: 
-la produzione di energia elettrica mediante fotovoltaico pu\`o essere
-modellata, infatti, come un \emph{processo continuo} caratterizzato dalle 
-seguenti \emph{variabili di stato}:
+Gli obiettivi di un sistema di monitoraggio, secondo \cite{dirks06}, consiste 
+nella raccolta e nell'integrazione di tutti i dati \emph{rilevanti} dell'impianto 
+fotovoltaico, al fine di determinare, nel tempo:
 %
 \begin{itemize}
-\item la corrente che attraversa ogni singola stringa
-\item la potenza in ingresso ad ogni inverter
-\item la potenza in uscita ad ogni inverter
-\item la potenze attive e reattive scambiate con la rete di distribuzione
+\item lo \emph{stato operativo} dell'impianto stesso
+\item l'efficienza globale dell'impianto
+\item la quantit\`a di energia prodotta
+\item lo stato di salute e il degrado prestazionale dei singoli componenti
 \end{itemize}
 %
 
 %
+Una pi\`u articolata definizione delle finalit\`a di un sistema di monitoraggio
+\`e presentata in \cite{kolodenny08}. L'approccio consiste nella 
+individuazione di tre \emph{classi} di utenti a seconda del loro ruolo, i.e.
+a seconda del tipo di informazioni cui essi sono interessati:
+%
+\begin{itemize}
+\item \emph{ricercatore}, i.e. \emph{una persona che analizza tutti i dati disponibili 
+alla ricerca di possibili relazioni}; i ricercatori sono, generalmente, interessati 
+ad avere quanti pi\`u dati possibili, ad un livello di dettaglio quanto pi\`u elevato
+possibile
+%
+\item \emph{proprietario}, i.e. il soggetto responsabile dell'impianto; le informazioni
+cui i soggetti responsabili sono, tipicamente, maggiormente interessati sono \Item{i}
+quanta energia il suo sistema sta producendo e \Item{ii} se la quantit\`a di energia 
+prodotta \`e comparabile con le stime pre-investimento
+%
+\item \emph{tecnico}, i.e. il soggetto manutentore dell'impianto; i manutentori sono
+interessati ad essere notificati rapidamente di tutti i possibili sintomi di malfunzionamento 
+e/o di ogni comportamento non regolare dell'impianto, al fine di diagnosticarne le cause
+\end{itemize}
+%
+
+%% quale grandezza misurare? quante misurarne?
+%% la semplice potenza in uscita non basta !
+
+%% The objective of the monitoring system is to comprehensively
+%% collect and integrate all relevant data. This includes voltage,
+%% current and energy measurements of the nett photovoltaic
+%% system, its ambient operating environment and local
+%% atmospheric conditions. This data can then be used for short
+%% term purposes such as monitoring the system’s operating
+%% status as well as for multi-year objectives such as monitoring
+%% the deterioration of components with time, estimation of the
+%% overall efficiency and energy generation and so on. The work
+%% was also driven by the need to generate data on BIPV systems
+%% in northern latitude with extreme temperature variations. It
+%% was also hoped that the data would help in the development of
+%% more accurate modeling of such systems.
 
 
 
 
 
-\begin{equation}
-  N_{sG} V_{mMr} N_{pG} I_{mMr} (PSH) = E_{DC}
-\end{equation}
+
+
+%% Il problema del monitoraggio pu\`o essere formulato mutuando concetti e 
+%% terminologia dal \emph{controllo dei processi industriali}: 
+%% la produzione di energia elettrica mediante fotovoltaico pu\`o essere
+%% modellata, infatti, come un \emph{processo continuo} caratterizzato dalle 
+%% seguenti \emph{variabili di stato}:
+%% %
+%% \begin{itemize}
+%% \item la corrente che attraversa ogni singola stringa
+%% \item la potenza in ingresso ad ogni inverter
+%% \item la potenza in uscita ad ogni inverter
+%% \item la potenze attive e reattive scambiate con la rete di distribuzione
+%% \end{itemize}
+%% %
+
+%% %
+
+
+
+
+
+%% \begin{equation}
+%%   N_{sG} V_{mMr} N_{pG} I_{mMr} (PSH) = E_{DC}
+%% \end{equation}
 
 %% V_{mMr} e I_{mMr} sono tensione e corrente al MPP (standard test conditions)
 %% N_{sG} numero di moduli in serie
