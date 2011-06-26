@@ -387,12 +387,17 @@ In linea teorica, un calo di potenza potrebbe essere dovuto sia a un malfunziona
 di un componente, sia a un momentaneo annuvolamento. Per cui, informazioni utili per 
 l'identificazione delle cause del problema sono anche le correnti delle singole stringhe e le 
 condizioni metereologiche del sito ove l'impianto \`e installato.
+%
+Come fatto notare in \cite{kolodenny08}, \emph{pi\`u l'insieme delle informazioni rilevanti 
+\`e completo, pi\`u rapida e affidabile sar\`a la procedura di diagnostica di ogni 
+malfunzionamento del sistema}.
 %% parlare del predictive monitoring?
+%
 
 %
 In generale, un insieme di \emph{grandezze rilevanti} adatto a qualunque esigenza 
 di monitoraggio, \`e ricavabile da una analisi delle soluzioni proposte in letteratura
-\cite{xiaoli11}, \cite{dirks06}, \cite{kolodenny06}, \cite{aristizabal06}:
+\cite{xiaoli11}, \cite{dirks06}, \cite{kolodenny06}, \cite{aristizabal06}: %%\cite{benghanem98}:
 %
 \begin{itemize}
 \item tensioni, correnti e potenze in punti specifici dell'impianto
@@ -401,11 +406,34 @@ di monitoraggio, \`e ricavabile da una analisi delle soluzioni proposte in lette
 \item irraggiamento
 \item velocit\`a e direzione del vento
 \end{itemize}
+%
 %% ---> alcune variabili possono essere stimate
 %
 \subsection{Acquisizione dati}
+Il monitoraggio delle grandezze rilevanti, richiede l'installazione sul campo e 
+l'interfacciamento di sensori di vario tipo (sensori di corrente, di irraggiamento, etc.)
+%% i sensori utilizzati sono spesso disegnati appositamente per il fotovoltaico (kolodenny08)
+Per l'acquisizione dei dati generati dai sensori, i sistemi di monitoraggio proposti in 
+letteratura adottano le soluzioni pi\`u disparate:
+%
+\begin{itemize}
+\item in \cite{roman06}, la comunicazione con i sensori di campo avviene sfruttando  
+      le stesse \emph{power line} dell'impianto e, quindi, senza alcuna necessit\`a di 
+      cablaggi aggiuntivi; i sensori vengono interrogati periodicamente da un PLC
+\item in \cite{xiaoli11} viene proposto un approccio basato sull'implementazione di una 
+      \emph{wireless sensor network} (WSN): ogni sensore \`e dotato di un transponder 
+      ZigBee\cite{zigbee} che gli permette di interfacciarsi con una \emph{base station},
+      il cui compito \`e quello di raccogliere e integrare i dati di tutti i sensori;
+      come la soluzione precedente, anche in questo caso non vi \`e necessit\`a di 
+      cablaggi aggiuntivi
+\item in \cite{guozhen09} vengono affrontate alcune problematiche legate 
+      all'implementazione di sistemi SCADA per il monitoraggio di impianti fotovoltaici
+\end{itemize}
+%
+%% --> La scelta del sistema di acquisizione e` un compromesso tra necessita` di dati real time
+%%     e complessita` di installazione del sistema
 
-
+%% problemi legati ai sensori
 
 \subsection{Presentazione dati}
 
