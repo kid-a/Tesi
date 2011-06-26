@@ -412,6 +412,9 @@ di monitoraggio, \`e ricavabile da una analisi delle soluzioni proposte in lette
 \subsection{Acquisizione dati}
 Il monitoraggio delle grandezze rilevanti, richiede l'installazione sul campo e 
 l'interfacciamento di sensori di vario tipo (sensori di corrente, di irraggiamento, etc.)
+%
+
+%
 %% i sensori utilizzati sono spesso disegnati appositamente per il fotovoltaico (kolodenny08)
 Per l'acquisizione dei dati generati dai sensori, i sistemi di monitoraggio proposti in 
 letteratura adottano le soluzioni pi\`u disparate:
@@ -430,95 +433,41 @@ letteratura adottano le soluzioni pi\`u disparate:
       all'implementazione di sistemi SCADA per il monitoraggio di impianti fotovoltaici
 \end{itemize}
 %
-%% --> La scelta del sistema di acquisizione e` un compromesso tra necessita` di dati real time
-%%     e complessita` di installazione del sistema
+La scelta del sistema di acquisizione da utilizzare \`e anch'essa frutto delle esigenze 
+di monitoraggio. 
+%
+Sistemi basati su bus industriali gestiti da PLC o SCADA sono in grado di 
+offrire delle garanzie di consegna dei dati di tipo \emph{real time}; 
+%
+soluzioni di questo tipo potrebbero essere adottate nei casi in cui, ad esempio, 
+si abbia la necessit\`a di tracciare, con estrema precisione, l'andamento nel tempo 
+di grandezze caratterizzate da alta \emph{variabilit\`a}, p.es. l'irraggiamento.
+D'altro canto si tratta di sistemi che richiedono cablaggi dedicati e, nel complesso, 
+non sono di immediata installazione e configurazione.
+%
 
-%% problemi legati ai sensori
-
+%
+Una soluzione basata su WSN, d'altra parte, \`e pi\`u economica e semplice da 
+installare e configurare, a fronte di una ridottissima capacit\`a a far fronte a 
+esigenze di monitoraggio tempo critiche.
+%
 \subsection{Presentazione dati}
+Oltre all'acquisizione dei dati di campo, un sistema di monitoraggio deve essere in grado
+di processare e trasformare i dati raccolti al fine di renderli \emph{rappresentabili}
+e al fine di rendere semplice l'estrazione di informazioni rilevanti dai dati stessi.
+%
+
+%
+Ad esempio, un valore di corrente di stringa eccessivamente basso rispetto alle condizioni
+di irraggiamento dovrebbe essere segnalato in maniera 
 
 
 
 
-%% Al fine di produrre le informazioni rilevanti per ciascuna delle classi di utenti sopra
-%% indicate, \`e necessario monitorare un insieme di \emph{grandezze di campo} mediante 
-%% l'uso di 
+%% quale tecnologia utilizzare?
+%% anche la rappresentazione dipende dal tipo di sistema implementato
+%% ad esempio, la presentazione deve poter facilitare il compito al tecnico
+%% indicando subito eventuali parametri fuori norma
 
-
-%% %% Produrre le informazioni rilevanti per ciascuna delle classi di utenti sopra indicate
-%% %% richiede, come prima cosa, l'identificazione delle grandezze di campo da monitorare.
-%% %% %
-%% %% Ad esempio, produrre le informazioni relative alla produzione energetica per i 
-%% %% proprietari degli impianti, richiede la conoscenz
-
-
-%% Estrapolare e/o produrre le informazioni richieste da ciascuna delle classi di utenti
-%% sopra elencate, richiede \Item{i} l'identificazione delle grandezze 
-
-%% -> quali variabili misurare?
-%% -> ogni quanto misurarle?
-
-%% quale grandezza misurare? quante misurarne?
-%% la semplice potenza in uscita non basta !
-
-%% The objective of the monitoring system is to comprehensively
-%% collect and integrate all relevant data. This includes voltage,
-%% current and energy measurements of the nett photovoltaic
-%% system, its ambient operating environment and local
-%% atmospheric conditions. This data can then be used for short
-%% term purposes such as monitoring the system’s operating
-%% status as well as for multi-year objectives such as monitoring
-%% the deterioration of components with time, estimation of the
-%% overall efficiency and energy generation and so on. The work
-%% was also driven by the need to generate data on BIPV systems
-%% in northern latitude with extreme temperature variations. It
-%% was also hoped that the data would help in the development of
-%% more accurate modeling of such systems.
-
-
-
-
-
-
-
-%% Il problema del monitoraggio pu\`o essere formulato mutuando concetti e 
-%% terminologia dal \emph{controllo dei processi industriali}: 
-%% la produzione di energia elettrica mediante fotovoltaico pu\`o essere
-%% modellata, infatti, come un \emph{processo continuo} caratterizzato dalle 
-%% seguenti \emph{variabili di stato}:
-%% %
-%% \begin{itemize}
-%% \item la corrente che attraversa ogni singola stringa
-%% \item la potenza in ingresso ad ogni inverter
-%% \item la potenza in uscita ad ogni inverter
-%% \item la potenze attive e reattive scambiate con la rete di distribuzione
-%% \end{itemize}
-%% %
-
-%% %
-
-
-
-
-
-%% \begin{equation}
-%%   N_{sG} V_{mMr} N_{pG} I_{mMr} (PSH) = E_{DC}
-%% \end{equation}
-
-%% V_{mMr} e I_{mMr} sono tensione e corrente al MPP (standard test conditions)
-%% N_{sG} numero di moduli in serie
-%% N_{pG} numero di serie
-%% PSH peak solar hours
-
-
-%% cosa monitorare: tensioni, correnti, potenze, energie
-%% cosa monitorare: degradazione delle performance dei singoli componenti
-
-
-
-
-
-%% architettura tipica di un impianto fotovoltaico
-%% quali informazioni si vogliono produrre?
-%% quali informazioni e` necessario rilevare?
+%%\section{Un sistema di monitoraggio large scale per applicazioni business}
 %% lista dei desiderata per un sistema di monitoraggio
