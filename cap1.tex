@@ -325,7 +325,8 @@ impianti fotovoltaici.
 %
 
 %
-Gli obiettivi di un sistema di monitoraggio, secondo \cite{dirks06}, consiste 
+\subsection{Obiettivi}
+L'obiettivo di un sistema di monitoraggio, secondo \cite{dirks06}, consiste 
 nella raccolta e nell'integrazione di tutti i dati \emph{rilevanti} dell'impianto 
 fotovoltaico, al fine di determinare, nel tempo:
 %
@@ -341,7 +342,8 @@ fotovoltaico, al fine di determinare, nel tempo:
 Una pi\`u articolata definizione delle finalit\`a di un sistema di monitoraggio
 \`e presentata in \cite{kolodenny08}. L'approccio consiste nella 
 individuazione di tre \emph{classi} di utenti a seconda del loro ruolo, i.e.
-a seconda del tipo di informazioni cui essi sono interessati:
+a seconda del tipo di informazioni, relative all'impianto monitorato,
+cui essi sono interessati:
 %
 \begin{itemize}
 \item \emph{ricercatore}, i.e. \emph{una persona che analizza tutti i dati disponibili 
@@ -359,6 +361,74 @@ interessati ad essere notificati rapidamente di tutti i possibili sintomi di mal
 e/o di ogni comportamento non regolare dell'impianto, al fine di diagnosticarne le cause
 \end{itemize}
 %
+
+%
+\subsection{Identificazione delle grandezze rilevanti}
+Alla base di ogni sistema di monitoraggio vi \`e un \emph{outdoor data acquisition system} 
+(DAS), ovvero un sistema di acquisizione dati costituito da un insieme di sensori 
+e da una infrastruttura di comunicazione che consente di rilevare il valore di 
+determinate \emph{variabili di campo}. 
+%% la produzione e` un processo continuo
+Intuitivamente, la scelta delle variabili di campo da monitorare dipende fortemente dalla 
+classe di utenti che costituiranno gli \emph{end-user} del sistema di monitoraggio.
+%
+Ad esempio, per fornire ai proprietari informazioni circa il rendimento dei loro impianti 
+\`e sicuramente necessario monitorare, mediante apposita sensoristica, la potenza scambiata 
+con la rete di distribuzione. La sola conoscenza della potenza scambiata, invece, potrebbe 
+non essere sufficiente ai manutentori.
+%
+Supponiamo, ad esempio, che si rilevi una potenza prodotta inferiore al 75\% della potenza di picco
+dell'impianto (la maggior parte degli impianti, causa mismatch di corrente, ombreggiamenti e 
+altre condizizioni indesiderabili, mostra, normalmente, una resa media inferiore al 20-25\% rispetto 
+alla potenza di picco\cite{roman06}) e che si desideri individuare le cause di tale degrado 
+di performance.
+%
+In linea teorica, un calo di potenza potrebbe essere dovuto sia a un malfunzionamento 
+di un componente, sia a un momentaneo annuvolamento. Per cui, informazioni utili per 
+l'identificazione delle cause del problema sono anche le correnti delle singole stringhe e le 
+condizioni metereologiche del sito ove l'impianto \`e installato.
+%% parlare del predictive monitoring?
+
+%
+In generale, un insieme di \emph{grandezze rilevanti} adatto a qualunque esigenza 
+di monitoraggio, \`e ricavabile da una analisi delle soluzioni proposte in letteratura
+\cite{xiaoli11}, \cite{dirks06}, \cite{kolodenny06}, \cite{aristizabal06}:
+%
+\begin{itemize}
+\item tensioni, correnti e potenze in punti specifici dell'impianto
+\item temperatura ambientale
+\item temperatura dei dispositivi
+\item irraggiamento
+\item velocit\`a e direzione del vento
+\end{itemize}
+%% ---> alcune variabili possono essere stimate
+%
+\subsection{Acquisizione dati}
+
+
+
+\subsection{Presentazione dati}
+
+
+
+
+%% Al fine di produrre le informazioni rilevanti per ciascuna delle classi di utenti sopra
+%% indicate, \`e necessario monitorare un insieme di \emph{grandezze di campo} mediante 
+%% l'uso di 
+
+
+%% %% Produrre le informazioni rilevanti per ciascuna delle classi di utenti sopra indicate
+%% %% richiede, come prima cosa, l'identificazione delle grandezze di campo da monitorare.
+%% %% %
+%% %% Ad esempio, produrre le informazioni relative alla produzione energetica per i 
+%% %% proprietari degli impianti, richiede la conoscenz
+
+
+%% Estrapolare e/o produrre le informazioni richieste da ciascuna delle classi di utenti
+%% sopra elencate, richiede \Item{i} l'identificazione delle grandezze 
+
+%% -> quali variabili misurare?
+%% -> ogni quanto misurarle?
 
 %% quale grandezza misurare? quante misurarne?
 %% la semplice potenza in uscita non basta !
