@@ -32,14 +32,14 @@ di monitoraggio? Le motivazioni possibili sono almeno due:
 %
 Nel capitolo precendete sono state presentate alcune delle soluzioni di 
 monitoraggio proposte in letteratura. Tuttavia, nessuno dei sistemi analizzati 
-\`e stato progettato per un uso impiego su vasta scala da parte di una impresa, 
+\`e stato progettato per un impiego su vasta scala da parte di una impresa, 
 piuttosto si tratta di sistemi \emph{prototipo}, pensati pi\`u per un uso 
 accademico che per la produzione in serie.
 %
 
-%
+%%
 La progettazione di un sistema di monitoraggio da produrre in serie e da utilizzare su 
-vasta scala non pu\`o non tenere conto di altri fattori quali il costo dei 
+vasta scala non pu\`o non tenere conto di fattori quali il costo dei 
 componenti, la facilit\`a d'installazione, ecc.
 %
 
@@ -71,24 +71,54 @@ ha, quindi, visto l'individuazione della seguente lista di \emph{desiderata}:
 \end{itemize}
 %
 
+\section{Panoramica del sistema}
 %
-Il passo successivo, il primo vero step \emph{concreto} di progettazione, \`e consistito 
-nell'individuazione delle grandezze rilevanti.
+L'architettura generale del sistema realizzato \`e rappresentata in figura 
+\ref{architettura-sistema}.
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=400pt]{img/architecture.png}
+\caption{Architettura del sistema}
+\label{architettura-sistema}
+\end{figure}
+%
+Nella parte sinistra, \`e presente l'infrastruttura di sensori di campo 
+utilizzata per la misura delle grandezze rilevanti.
+%
+Tale infrastruttura trasmette le letture rilevate mediante una connessione dati 
+gprs o gsm ad un \emph{datacenter}, il cui compito \`e quello di processare i dati 
+ricevuti, produrre report e allarmi, e pubblicare tutto ci\`o mediante dei 
+\emph{web services}.
+%
+Infine, nella parte pi\`u a destra della figura, \`e rappresentato il \emph{portale web} 
+che, utilizzando i servizi web esposti dal datacenter come sorgente dati, fornisce 
+una rappresentazione visuale e interattiva dei dati prodotti dal sistema.
+%
+
+%
+Cominciamo l'analisi del sistema dalla infrastruttura dei sensori di campo.
+%
+In particolare, vediamo quali grandezze si \`e scelto di misurare e quali sono
+state le scelte tecnologiche per la realizzazione della infrastruttura.
 %
 
 %
 \section{Grandezze rilevanti}
 \label{sec:grandezze-rilevanti}
-La scelta delle grandezze rilevanti ha, ovviamente, tenuto conto della tipologia di
-informazioni da produrre. 
+%
+La classificazione degli utenti proposta in \cite{kolodenny08} pu\`o essere utile ai 
+fini dell'individuazione delle grandezze rilevanti. Le esigenze di monitoraggio 
+espresse nell'introduzione a questo capitolo, infatti, prevedono che il sistema 
+sia in grado di produrre sia le informazioni cui tipicamente sono interessati i 
+\emph{proprietari} degli impianti, sia le informazioni utili ai \emph{manutentori} 
+per rilevare malfunzionamenti ed, eventualmente, effettuare diagnosi.
 %
 
 %
-Tenendo conto delle esigenze di monitoraggio sopra evidenziate, le quali, fondamentalmente, 
-fanno riferimento alle classi di utenti \emph{proprietario} e \emph{manutentore} introdotte in 
-\cite{kolodenny08}, sono state individuate come rilevanti, per un generico impianto 
+Alla luce di ci\`o, sono state individuate come rilevanti per un generico impianto 
 caratterizzato dalla seguente configurazione,
-%% sono necessarie per la diagnostica
+%
 \begin{itemize}
 \item $NI$, numero di inverter.
 \item $NS_k, k \in \{1, \dots, NI\}$, numero di stringhe dell'inverter $k$.
@@ -105,10 +135,9 @@ caratterizzato dalla seguente configurazione,
   $j$ dell'inverter $k$.
 \end{itemize}
 %
-le grandezze definite nel seguente schema, il quale non si limita ad elencarle, 
+le grandezze definite nel seguente \emph{schema}, il quale non si limita ad elencarle, 
 ma definisce anche quali grandezze si \`e deciso di misurare direttamente e 
-quali, invece, si \`e deciso di stimare e quali relazioni utilizzare per la
-loro stima:
+quali, invece, si \`e deciso di stimare:
 %
 \begin{enumerate}
 %%
@@ -176,32 +205,117 @@ loro stima:
 %
 
 %
-\section{Dispositivi di campo}
-Per la misurazione diretta delle grandezze individuate nel paragrafo precedente 
-sono state individuate 4 classi di dispositivi di campo:
-%% porre l'accento sull'uso delle sensor network e di zigbee
-\subsection{Power Transponder}
-\subsection{Inverter Transponder}
-\subsection{String Transponder}
-\subsection{Gateway}
-
-
-
-
-
-\section{Panoramica del sistema}
+Come vedremo in seguito, tale schema \`e assolutamente \emph{generico}. 
 %
-L'architettura generale del sistema \`e rappresentata in figura \ref{architettura-sistema}.
+La modularit\`a che caratterizza il sistema implementato permette, infatti, 
+di scegliere tra due possibili \emph{profili di monitoraggio}: uno \emph{basic}, 
+pi\`u economico, che si limita alla sola misurazione della potenza scambiata con 
+la rete al fine di monitorare la produzione energetica dell'impianto (tale soluzione 
+\`e ideale nel caso di impianti di piccola dimensione) e uno \emph{pro}, che effettua 
+la misurazione di tutte le grandezze riportate nello schema (ed \`e pi\`u adatto a 
+impianti di grandi dimensioni, dove diagnosticare un malfunzionamento richiede 
+una conoscenza di livello pi\`u approfondito dello stato dell'impianto).
+%
+
+%
+\section{Dispositivi di campo}
+Per la misura delle grandezze rilevanti, si \`e deciso di seguire l'approccio
+proposto in \cite{xiaoli11}, ovvero l'implementazione di una WSN basata 
+su ZigBee. 
+%
+Questo tipo di soluzione \`e particolarmente adatta alle nostre esigenze di 
+monitoraggio, in quanto non prevede alcun tipo cablaggio; inoltre, i transponder 
+ZigBee sono noti per i loro profili di consumo \emph{ultra-low power}: 
+ci\`o ha permette l'utilizzo di dispositivi alimentati a batteria, la cui 
+durata \`e dell'ordine degli anni, e la totale indipendenza da fonti di 
+alimentazione esterna; infine, le WSN ZigBee sono autoconfiguranti: esistono,
+infatti, dei profili applicativi che prevedono il \emph{setting up} automatico 
+della WSN, senza alcuna necessit\`a di intervento umano.
+%
+
+%
+Per effettuare concretamente le misurazioni, sono stati previsti due tipi di 
+componenti di campo: \emph{power/inverter transponders}, e \emph{string transponders}.
+%% introdurre il gateway
+
+\subsection{Gateway}
+%% comunica tramite gprs -> no necessita` di landline
+
+%
+%% perdita in termini di risoluzione -> non piu` real time, ma non importa
+%% parlare del gateway e del tipo di connessione dati
+
+%
+\subsection{Power/Inverter Transponder}
+%
+Il \emph{Power/Inverter Transponder} \`e un dispositivo costituito da \Item{i} un 
+analizzatore di rete e \Item{ii} un transponder ZigBee.
+%
+Questi dispositivi sono stati pensati per essere collegati alla rete in alternata 
+dell'impianto fotovoltaico e, in particolare, per misurare le grandezze rilevanti 
+a monte del contatore bidirezionale (power transponder) e a valle degli inverter 
+(inverter transponder).
+%
+
+%
+Il modello di analizzatore di rete scelto \`e il \emph{Socomec Diris A10}
+\cite{dirisa10}, in grado di misurare tensione, corrente, potenza, power factor 
+e frequenza sia su linee monofase che trifase.
 %
 \begin{figure}[!h]
 \centering
-\includegraphics[width=400pt]{img/architecture.png}
-\caption{Architettura del sistema}
-\label{architettura-sistema}
+\includegraphics[width=150pt]{img/power-transponder.jpg}
+\caption{Socomec Diris A10}
+\label{power-transpoder}
 \end{figure}
 %
 
 %
+Gli analizzatori di rete, in genere, non vanno collegati direttamente alle linee di 
+potenza su cui effettuare le misurazioni, ma vengono interfacciati mediante dei 
+\emph{trasformatori amperometrici} (TA).
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=150pt]{img/ta.jpg}
+\caption{Trasformatore amperometrico 100/5A}
+\label{ta}
+\end{figure}
+%
+
+%
+Essendo dei dispositivi atti alla misura di grandezze di rete in ambito industriale, 
+sia gli analizzatori di rete Socomec, sia i TA sono dotati di apposito \emph{attacco} 
+per montaggio su barra DIN: ci\`o fa del \emph{quadro di alternata} dell'impianto 
+il luogo ideale per l'installazione dei power/inverter transponder.
+%
+
+%
+\subsection{String Transponder}
+Lo \emph{String Transponder} \`e il dispositivo pensato per la misura delle correnti 
+di stringa. \`E anch'esso, come il power/inverter transponder, un dispositivo composito:
+\`e costituito da un transponder ZigBee e da un sensore di corrente a \emph{effetto Hall}.
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=150pt]{img/string-transponder.jpg}
+\caption{String Transponder}
+\label{string-transponder}
+\end{figure}
+%
+La scelta dei sensori di corrente induttivi \`e, ancora una volta, frutto della 
+necessit\`a di massimizzare la semplicit\`a di installazione del sistema. 
+%
+Come mostrato in figura \ref{string-transponder}, infatti, l'utilizzo di questi dispositivi
+richiede solo che il cavo su cui misurare la corrente venga fatto passare all'interno 
+del sensore, senza alcuna necessit\`a di interrompere il cavo stesso.
+%
+
+
+
+
+
+
 
 
 
