@@ -1,11 +1,11 @@
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Il datacenter}\label{sec:datacenter}
 Il datacenter \`e il componente del sistema responsabile della elaborazione 
-del flusso informativo generato dai dispositivi \emph{di campo}.
+del flusso informativo generato dai dispositivi \emph{di campo} installati 
+presso i vari impianti sotto monitoraggio.
 %
-Si tratta di un sistema software /emph{online} costituito da 
-diverse applicazioni, ciascuna delle quali implementa una o pi\`u delle 
-funzionalit\`a tra quelle riportate di seguito:
+Si tratta di un sistema software costituito da diverse applicazioni, ciascuna 
+delle quali implementa una o pi\`u delle funzionalit\`a tra quelle riportate di seguito:
 %
 \begin{itemize}
   \item decodifica dei \emph{dati di campo}
@@ -57,21 +57,60 @@ flussi informativi, da monitorare. %% e se un giorno volessi distribuire il data
 %
 Tali propriet\`a hanno fortemente condizionato il successivo \emph{step} di
 progettazione, ovvero la scelta della \emph{tecnologia} su cui costruire il 
-datacenter.
-%
-Tale scelta \`e ricaduta su Erlang/OTP (un acronimo per \emph{Open Telecom 
-Platform}).
+datacenter, che \`e, infine, ricaduta su Erlang/OTP.
 %
 
 %
 Questo capitolo \`e organizzato come segue: il prossimi due paragrafi
 introdurranno Erlang/OTP e si soffermeranno sui motivi che ne fanno la scelta 
-tecnologica pi\`u adatta. Successivamente, a partire dal paragrafo \ref{datacenter-arch} 
-verr\`a descritta l'architettura del datacenter.
+tecnologica pi\`u adatta. Successivamente, a partire dal paragrafo 
+\ref{datacenter-arch} verr\`a descritta l'architettura del datacenter.
 %
 
 %
 \section{Breve introduzione a Erlang/OTP}%%
+OTP \`e l'acronimo di \emph{Open Telecom Platform}. Rilasciata da \emph{Ericsson} 
+a partire dal 1998, si tratta di un \emph{middleware} per applicazioni distribuite 
+scritte in Erlang\cite{erlang}. Il suo campo di applicazione, a dispetto di quanto 
+il nome possa lasciar intendere, va ben oltre le telecomunicazioni.
+%
+
+%
+Una definizione pi\`u articolata di cosa sia OTP \`e fornita da Joe Armstrong in 
+\cite{armstrong07}: \emph{OTP is an application operating system and a set of libraries 
+and procedures used for building large-scale, fault-tolerant, distributed applications}.
+%
+
+%
+L'intera architettura di OTP si basa sul concetto, fondamentale, di \emph{behaviour}:
+un behaviour \`e un componente astratto che implementa un determinato 
+\emph{design pattern} tipico della programmazione concorrente, p.es. il modello di 
+interazione \emph{client/server}. 
+%
+I behaviour OTP, nel loro complesso, forniscono \emph{a set of standardized building 
+blocks used in designing and building industrial-grade systems}\cite{cesarini09}.
+%
+In altre parole, citando \cite{armstrong07}, il loro utilizzo consente agli sviluppatori 
+di concentrarsi sulla parte \emph{funzionale} dell'applicazione, i.e. la \emph{business logic}, 
+lasciando che il middleware si occupi di gestire gli aspetti \emph{non funzionali}, quali 
+\emph{fault-tolerance}, \emph{scalability}, \emph{dynamic code upgrade}, ecc.
+%
+Business logic e behaviours possono essere collegati mediante l'implementazione di opportune 
+\emph{callback}.
+
+%% continuare prendendo spunto dai behaviours di erlang programming
+\begin{figure}[!h]
+\centering
+\includegraphics[width=400pt]{img/erl-behaviour.png}
+\caption{Separazione del codice in behaviour e business logic}
+%%\label{architettura-sistema}
+\end{figure}
+
+
+
+
+
+
 %% un po` di bla bla su erlang
 %% un po` di bla bla su otp
 %% bit syntax
@@ -80,7 +119,6 @@ verr\`a descritta l'architettura del datacenter.
 %% linguaggio piccolo e facile da imparare
 
 \section{Perch\`e OTP}
-
 
 %% architettura: insieme di erlang applications:
 \section{L'architettura del datacenter}
