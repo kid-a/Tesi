@@ -43,7 +43,7 @@ presto o tardi, processato.
 in esecuzione, salvo \emph{downtime} programmati per operazioni quali 
 aggiornamento release, etc.
 %
-\item \emph{robustness}, i.e. l'esecuzione del datacenter non deve essere 
+\item \emph{reliability}, i.e. l'esecuzione del datacenter non deve essere 
 compromessa da situazioni anomale quali, ad esempio, la ricezione di dati 
 \emph{malformati} da parte di dispositivi di campo in avaria. Il datacenter 
 deve essere in grado di rilevare potenziali anomalie.%% e segnalarle?
@@ -63,10 +63,10 @@ datacenter, che \`e, infine, ricaduta su Erlang/OTP.
 %
 
 %
-Questo capitolo \`e organizzato come segue: il prossimi due paragrafi
-introdurranno Erlang/OTP e si soffermeranno sui motivi che ne fanno la scelta %% e introduranno dei concetti fondamentali per descrivere il sistema
-tecnologica pi\`u adatta. Successivamente, a partire dal paragrafo 
-\ref{datacenter-arch} verr\`a descritta l'architettura del datacenter.
+Il prossimo paragrafo introdurr\`a OTP, soffermandosi su alcuni dei suoi aspetti 
+chiave; il paragrafo successivo analizzer\`a le motivazioni che hanno portato alla 
+sua scelta quale piattaforma tecnologica; il resto del capitolo, infine, \`e dedicato 
+ad alla descrizione dell'architettura e dei componenti del datacanter.
 %
 
 %
@@ -98,7 +98,8 @@ blocks used in designing and building industrial-grade systems}\cite{cesarini09}
 In altre parole, citando \cite{armstrong07}, il loro utilizzo consente agli sviluppatori 
 di concentrarsi sulla parte \emph{funzionale} dell'applicazione, i.e. la \emph{business logic}, 
 lasciando che il middleware si occupi di gestire gli aspetti \emph{non funzionali}, quali 
-\emph{fault-tolerance}, \emph{scalability}, \emph{dynamic code upgrade}, ecc.
+\emph{fault-tolerance}, \emph{scalability}, \emph{dynamic code upgrade}, \emph{inter-process 
+communication} ecc.
 %
 
 %
@@ -161,10 +162,52 @@ together with supervisor and worker processes}\cite{cesarini09}.
 Una sistema basato su OTP \`e, quindi, formato da un insieme di \emph{application} distribuite 
 e lascamente accoppiate, ciascuna delle quali implementa una determinata funzionlit\`a.
 %
-%% supporto per erlang applications: restart, etc.
 
 %
 \section{Perch\`e OTP}
+%
+La scelta della piattaforma tecnologica su cui progettare e costruire il datacenter \`e 
+ricaduta su Erlang/OTP per i seguenti motivi:
+%
+\begin{itemize}
+\item \emph{rapidit\`a di sviluppo}: come gi\`a visto, l'uso dei behaviour consente 
+      di concentrarsi sulla business logic di una applicazione; ci\`o \`e particolarmente 
+      utile nel caso di applicazioni complesse come il datacenter; 
+%% e le caratteristiche 'dichiarative' di Erlang?
+%
+\item \emph{efficienza e robustezza}: OTP \`e \emph{open source} e, in quanto tale, 
+      il suo codice \`e sottoposto a continua revisione e raffinamento; scrivere 
+      una applicazione delegando la parte non funzionale a OTP vuol dire, quindi, 
+      fare affidamento su una piattaforma assolutamente robusta ed efficiente; 
+      a riprova di ci\`o, molti brand famosi utilizzano OTP per alcune delle loro
+      soluzioni\cite{whouseserlang}
+%
+\item \emph{supporto per sistemi sempre online}: i supervisor di un albero possono essere 
+      configurati per riavviare i loro worker nel caso in cui questi dovessero, per 
+      un qualunque motivo, terminare la loro esecuzione in maniera anormale, i.e. 
+      andare in \emph{crash}; ci\`o consente, di fatto, alle applicazioni stesse di
+      riavviarsi a seguito di una condizione anomala; OTP elimina persino la necessit\`a
+      di mandare offline una applicazione per un \emph{release upgrade}, in quanto 
+      supporta l'\emph{hot code swap}
+%
+\item \emph{rilevamento di crash e recovery}: Erlang pone fortemente l'accento sulla 
+      possibilit\`a che i processi possano andare in crash; piuttosto che tentare 
+      di prevenire questa eventualit\`a, il linguaggio mette a disposizione gli 
+      strumenti necessari per \Item{i} rilevare i crash e \Item{ii} pianificare 
+      delle strategie di recupero, e, quindi, per creare sistemi caratterizzati 
+      da un elevato grado di \emph{reliability} e \emph{fault tolerance}\cite{armstrongreliability}
+%
+\item \emph{scalabilit\`a}: uno degli aspetti chiave di Erlang \`e il suo supporto nativo 
+      e \emph{sui generis} per la concorrenza; a differenza di altri linguaggi di programmazione, 
+      infatti, il modello di concorrenza  implementato da Erlang \`e totalmente indipendente da 
+      quello del sottostante sistema operativo, i.e. non esiste un mapping 1-a-1 tra processi 
+      Erlang e processi di sistema; ci\`o consente alle applicazioni scritte in Erlang di 
+      scalare molto facilmente, come Ghodsi e Armstrong dimostrano in \cite{armstrongyaws}
+\end{itemize}
+%
+
+%% rapidita` di sviluppo di applicazioni complesse
+%% supporto per erlang applications: restart, etc.
 %% bit syntax
 
 
