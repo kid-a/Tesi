@@ -69,7 +69,7 @@ tecnologica pi\`u adatta. Successivamente, a partire dal paragrafo
 
 %
 \section{Breve introduzione a Erlang/OTP}%%
-OTP \`e l'acronimo di \emph{Open Telecom Platform}. Rilasciata da \emph{Ericsson} 
+OTP \`e l'acronimo di \emph{Open Telecom Platform}. Rilasciato da \emph{Ericsson} 
 a partire dal 1998, si tratta di un \emph{middleware} per applicazioni distribuite 
 scritte in Erlang\cite{erlang}. Il suo campo di applicazione, a dispetto di quanto 
 il nome possa lasciar intendere, va ben oltre le telecomunicazioni.
@@ -82,9 +82,11 @@ and procedures used for building large-scale, fault-tolerant, distributed applic
 %
 
 %
+\subsection{Behaviours}
+%
 L'intera architettura di OTP si basa sul concetto, fondamentale, di \emph{behaviour}:
 un behaviour \`e un componente astratto che implementa un determinato 
-\emph{design pattern} tipico della programmazione concorrente, p.es. il modello di 
+\emph{design pattern} tipico della \emph{programmazione concorrente}, p.es. il modello di 
 interazione \emph{client/server}. 
 %
 I behaviour OTP, nel loro complesso, forniscono \emph{a set of standardized building 
@@ -95,16 +97,72 @@ di concentrarsi sulla parte \emph{funzionale} dell'applicazione, i.e. la \emph{b
 lasciando che il middleware si occupi di gestire gli aspetti \emph{non funzionali}, quali 
 \emph{fault-tolerance}, \emph{scalability}, \emph{dynamic code upgrade}, ecc.
 %
-Business logic e behaviours possono essere collegati mediante l'implementazione di opportune 
-\emph{callback}.
 
-%% continuare prendendo spunto dai behaviours di erlang programming
+%
+I behaviour e i moduli application-specific vanno poi collegati, al fine di definire 
+un processo Erlang, mediante l'implementazione di opportune \emph{callback}.
+%
 \begin{figure}[!h]
 \centering
 \includegraphics[width=400pt]{img/erl-behaviour.png}
-\caption{Separazione del codice in behaviour e business logic}
-%%\label{architettura-sistema}
+\caption{Processo Erlang costituito da un behaviour e da un modulo di callback}
 \end{figure}
+%
+
+%
+\subsection{Supervision Tree}
+%
+Esistono due particolari classi di behaviours: \emph{worker} e \emph{supervisor}; 
+%
+i primi rappresentano i processi che si occupano di effettuare \emph{concretamente} del lavoro, 
+p.es. \emph{servers}, \emph{event handlers}, \emph{finite state machines}, ecc.
+%
+i secondi, invece, si occupano di supervisionare i propri \emph{figli}, i quali possono essere sia
+worker che, a loro volta, dei supervisors. 
+%
+Tra le responsabilit\`a di un supervisor vi sono:
+\begin{itemize}
+\item \emph{avviare} i processi i figli
+\item (opzionalmente) \emph{riavviare} i processi figli in caso di \emph{fault}
+\item \emph{terminare} i processi figli al termine dell'applicazione
+\end{itemize}
+%
+
+%
+Il \emph{supervision tree} non \`e altro che una rappresentazione delle relazioni di supervisione 
+all'interno di un sistema basato su OTP.
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=350pt]{img/supervision-tree.png}
+\caption{Esempio di supervision tree}
+\end{figure}
+%
+
+%
+
+%
+\subsection{Applications}
+%
+I supervision tree costituiscono, in un certo senso, lo \emph{scheletro} di ogni applicazione
+basata su OTP. Esiste, infatti, un behaviour detto \emph{application}, il cui ruolo \`e quello
+di raggruppare un insieme di supervision trees, rendendoli \emph{riusabili}. 
+%
+
+%
+In generale, una applicazione OTP \emph{is a reusable component that packages library modules 
+together with supervisor and worker processes.}
+
+%
+Una sistema basato su OTP \`e, quindi, formato da un insieme di \emph{application} distribuite 
+e lascamente accoppiate, ciascuna delle quali implementa una determinata funzionlit\`a. 
+%
+
+
+
+
+
+
 
 
 
