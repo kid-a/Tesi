@@ -1,5 +1,7 @@
 \clearpage{\pagestyle{empty}\cleardoublepage}
+\lstset{language=erlang, basicstyle=\small\ttfamily, keywordstyle=\color{black}, stringstyle=\color{black}, numbers=left, lineskip=0.4\baselineskip, breaklines=true}
 \chapter{Il datacenter}\label{sec:datacenter}
+%
 Il datacenter \`e il componente del sistema responsabile della elaborazione 
 del flusso informativo generato dai dispositivi \emph{di campo} installati 
 presso i vari impianti sotto monitoraggio.
@@ -68,7 +70,8 @@ tecnologica pi\`u adatta. Successivamente, a partire dal paragrafo
 %
 
 %
-\section{Breve introduzione a Erlang/OTP}%%
+\section{Breve introduzione a Erlang/OTP}
+%
 OTP \`e l'acronimo di \emph{Open Telecom Platform}. Rilasciato da \emph{Ericsson} 
 a partire dal 1998, si tratta di un \emph{middleware} per applicazioni distribuite 
 scritte in Erlang\cite{erlang}. Il suo campo di applicazione, a dispetto di quanto 
@@ -180,6 +183,87 @@ e lascamente accoppiate, ciascuna delle quali implementa una determinata funzion
 %% architettura: insieme di erlang applications:
 \section{L'architettura del datacenter}
 \label{datacenter-arch}
+%
+\section{L'applicazione \emph{database}}
+%
+\begin{lstlisting}[caption={Record per interfacciamento con il database}, label={code:database-record},frame=trBL]
+-record (device_type, { ...
+-record (device, { ...
+-record (measure, { ...
+-record (alarm, { ...
+-record (inverter_type, { ...
+-record (panel_type, { ...
+-record (plant, { ...
+-record (inverter, { ...
+-record (string, { ...
+-record (panel, { ...
+-record (measure_data, { ...
+-record (alarm_data, { ...
+\end{lstlisting}
+%
+
+%
+\begin{lstlisting}[caption={Interfaccia del modulo \texttt{data\_storage}}, label={code:data_storage_interface},frame=trBL]
+-export([start_link/0,
+
+         add_new_device_type/2,
+         get_device_type/1,
+         get_device_type_info/1,
+
+         get_device_by_id/1,
+         get_measure_by_id/1,
+	 get_alarm_by_id/1,
+	 get_measures_by_device/1,
+
+         add_new_inverter_type/3,
+         get_inverter_types/0,
+         get_inverter_type/1,
+
+         add_new_panel_type/3,
+         get_panel_types/0,
+         get_panel_type/1,
+
+         add_new_plant_by_structure/7,
+         add_new_plant/6,
+
+         get_plants/0,
+         get_plant/1,
+         get_plant_structure/1,
+         get_plant_devices/1,
+	 get_plant_weather_station/1,
+         delete_plant/1,
+
+         get_plant_by_gateway_unique_id/1,
+
+         set_plant_gateway/4,
+         set_plant_power_transponder/5,
+
+         add_new_inverter/4,
+         get_plant_inverters/1,
+         get_inverter_by_description/2,
+         get_inverter_by_id/1,
+         set_inverter_transponder/5,
+
+         get_inverter_strings/1,
+
+         add_new_string/2,
+         add_new_string/3,
+         get_string_by_description/3,
+         set_string_transponder/6,
+         get_string_by_id/1,
+	 get_string_parameters/1,
+
+         get_string_panels/1,
+
+         write_variables/1,
+	 write_alarms/1,
+	 inc_energy_offset/1,
+         get_trend_by_device/3,
+         get_trend_by_device/4,
+	 get_latest_value/2
+	]).
+\end{lstlisting}
+%
 \section{L'applicazione \emph{sysconf}}
 %
 \begin{figure}[!h]
@@ -187,6 +271,46 @@ e lascamente accoppiate, ciascuna delle quali implementa una determinata funzion
 \includegraphics[width=180pt]{img/sysconf.png}
 \caption{Supervision tree dell'applicazione Sysconf}
 \end{figure}
+%
+\begin{lstlisting}[caption={Stato del Config Server}, label={code:sysconf-state},frame=trBL]
+-record(config_server_state, 
+        { config_dir,
+          config,
+	  plants, %% table of {PlantID, [Device]}
+	  device_per_plant %% table of {Device, PlantID}
+	}).
+\end{lstlisting}
+%
+
+\begin{lstlisting}[caption={Lettura della configurazione degli impianti}, label={code:sysconf-conf-making},frame=trBL]
+TableOptions = [set, private, named_table, 
+                {read_concurrency, true}],
+
+PlantConfigs = ets:new (plant_configs, TableOptions),
+DeviceTable = ets:new (device_table, TableOptions),
+    
+{ok, Plants} = data_storage:get_plants (),
+lists:foreach (
+  fun (Plant) ->
+      PlantID = Plant#plant.id,
+      {ok, Devices} = 
+        data_storage:get_plant_devices (PlantID),
+
+      PlantConfig = 
+        [I || {#device { unique_id = I}, _, _} <- 
+              Devices],
+
+      DeviceEntries = 
+        [{I, P} || {#device { unique_id = I}, _, _} <-
+                   Devices,
+                   P <- [PlantID]],
+	      
+      ets:insert (PlantConfigs, {PlantID, PlantConfig}),
+      ets:insert (DeviceTable, DeviceEntries)
+  end, Plants),
+\end{lstlisting}
+%
+
 %
 \section{L'applicazione \emph{datamanager}}
 %
@@ -207,7 +331,7 @@ e lascamente accoppiate, ciascuna delle quali implementa una determinata funzion
 %
 \subsection{La decodifica: \emph{ftp\_protocol}}
 %% il supervision tree
-\section{L'applicazione \emph{database}}
+
 %
 \begin{figure}[!h]
 \centering
@@ -216,4 +340,4 @@ e lascamente accoppiate, ciascuna delle quali implementa una determinata funzion
 \end{figure}
 %
 \cite{erl-amnesia}
-\section{L'applicazione \emph{datamanager-ws}}
+\section{Web Services}
