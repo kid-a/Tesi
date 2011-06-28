@@ -112,7 +112,7 @@ un processo Erlang, mediante l'implementazione di opportune \emph{callback}.
 %
 \subsection{Supervision Tree}
 %
-Esistono due particolari classi di behaviours: \emph{worker} e \emph{supervisor}; 
+Esistono due particolari classi di behaviours: \emph{worker} e \emph{supervisor}\cite{otpsupervisor}; 
 %
 i primi rappresentano i processi che si occupano di effettuare \emph{concretamente} del lavoro, 
 p.es. \emph{servers}, \emph{event handlers}, \emph{finite state machines}, ecc.
@@ -145,36 +145,33 @@ all'interno di un sistema basato su OTP.
 \subsection{Applications}
 %
 I supervision tree costituiscono, in un certo senso, lo \emph{scheletro} di ogni applicazione
-basata su OTP. Esiste, infatti, un behaviour detto \emph{application}, il cui ruolo \`e quello
-di raggruppare un insieme di supervision trees, rendendoli \emph{riusabili}. 
+basata su OTP. Esiste, infatti, un behaviour detto \emph{application}\cite{otpapplication}, 
+il cui ruolo \`e quello di raggruppare un insieme di supervision trees, rendendoli 
+\emph{riusabili}. 
 %
 
 %
 In generale, una applicazione OTP \emph{is a reusable component that packages library modules 
-together with supervisor and worker processes.}
+together with supervisor and worker processes}\cite{cesarini09}.
 
 %
 Una sistema basato su OTP \`e, quindi, formato da un insieme di \emph{application} distribuite 
 e lascamente accoppiate, ciascuna delle quali implementa una determinata funzionlit\`a. 
 %
-
-
-
-
-
-
-
-
-
-
-
-
-%% un po` di bla bla su erlang
-%% un po` di bla bla su otp
-%% bit syntax
-%% caratteristiche: supporto nativo per la concorrenza, processi lightweight
 %% supporto per erlang applications: restart, etc.
-%% linguaggio piccolo e facile da imparare
+
+
+
+
+
+
+
+
+
+
+
+%% bit syntax
+
 
 \section{Perch\`e OTP}
 
@@ -183,6 +180,13 @@ e lascamente accoppiate, ciascuna delle quali implementa una determinata funzion
 \label{datacenter-arch}
 \section{L'applicazione \emph{sysconf}}
 \section{L'applicazione \emph{datamanager}}
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=380pt]{img/datamanager.png}
+\caption{Supervision Tree del datamanager}
+\end{figure}
+%
 \subsection{Il \emph{gen\_server filter}}
 \subsection{Il \emph{gen\_server file\_poller}}
 \subsection{La decodifica: \emph{ftp\_protocol}}
