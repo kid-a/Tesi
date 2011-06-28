@@ -62,7 +62,7 @@ datacenter, che \`e, infine, ricaduta su Erlang/OTP.
 
 %
 Questo capitolo \`e organizzato come segue: il prossimi due paragrafi
-introdurranno Erlang/OTP e si soffermeranno sui motivi che ne fanno la scelta 
+introdurranno Erlang/OTP e si soffermeranno sui motivi che ne fanno la scelta %% e introduranno dei concetti fondamentali per descrivere il sistema
 tecnologica pi\`u adatta. Successivamente, a partire dal paragrafo 
 \ref{datacenter-arch} verr\`a descritta l'architettura del datacenter.
 %
@@ -156,39 +156,55 @@ together with supervisor and worker processes}\cite{cesarini09}.
 
 %
 Una sistema basato su OTP \`e, quindi, formato da un insieme di \emph{application} distribuite 
-e lascamente accoppiate, ciascuna delle quali implementa una determinata funzionlit\`a. 
+e lascamente accoppiate, ciascuna delle quali implementa una determinata funzionlit\`a.
 %
 %% supporto per erlang applications: restart, etc.
 
-
-
-
-
-
-
-
-
-
-
+%
+\section{Perch\`e OTP}
 %% bit syntax
 
 
-\section{Perch\`e OTP}
+
+
+
+
+
+
+
+
+
+
+
 
 %% architettura: insieme di erlang applications:
 \section{L'architettura del datacenter}
 \label{datacenter-arch}
 \section{L'applicazione \emph{sysconf}}
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=180pt]{img/sysconf.png}
+\caption{Sysconf supervision tree}
+\end{figure}
+%
 \section{L'applicazione \emph{datamanager}}
 %
 \begin{figure}[!h]
 \centering
 \includegraphics[width=380pt]{img/datamanager.png}
-\caption{Supervision Tree del datamanager}
+\caption{Datamanager supervision tree}
 \end{figure}
 %
-\subsection{Il \emph{gen\_server filter}}
-\subsection{Il \emph{gen\_server file\_poller}}
+\subsection{Il filter}
+\subsection{Il file\_poller}
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=300pt]{img/file-poller.png}
+\caption{Sequenza di polling}
+\end{figure}
+%
 \subsection{La decodifica: \emph{ftp\_protocol}}
 %% il supervision tree
 \section{L'applicazione \emph{database}}
