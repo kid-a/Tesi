@@ -99,8 +99,8 @@ una rappresentazione visuale e interattiva dei dati prodotti dal sistema.
 %
 Cominciamo l'analisi del sistema dalla infrastruttura dei sensori di campo.
 %
-In particolare, vediamo quali grandezze si \`e scelto di misurare e quali sono
-state le scelte tecnologiche per la realizzazione della infrastruttura.
+In particolare, in questo capitolo, vedremo quali grandezze si \`e scelto di misurare 
+e quali sono state le scelte tecnologiche per la realizzazione della infrastruttura.
 %
 
 %
@@ -367,5 +367,33 @@ del sensore, senza alcuna necessit\`a di interrompere il cavo stesso.
 
 %
 \section{Profili di monitoraggio}
-%% profili di monitoraggio
-%% introduzione al datacenter
+Come precedentemente anticipato, sono stati previsti due differenti profili di monitoraggio, 
+a seconda del tipo e del numero di transponder che si decide di installare:
+%
+\begin{itemize}
+\item un profilo \emph{basic}, caratterizzato dalla seguente \emph{strumentazione minima}:
+      \begin{itemize}
+      \item 1 \textbf{Gateway}
+      \item 1 \textbf{Power Transponder}
+      \end{itemize}
+%
+\item un profilo \emph{pro}, cui vengono aggiunti, rispetto al profilo \emph{basic} i seguenti 
+      moduli \emph{opzionali}:
+      \begin{itemize}
+      \item n \textbf{Inverter Transponder} (n = numero di inverter)
+      \item m \textbf{String Transponder} (m = numero di stringhe)
+      \end{itemize}
+\end{itemize}
+%
+
+%
+Il primo profilo, pi\`u economico, \`e stato pensato in maniera specifica per il monitoraggio 
+di impianti di piccola taglia. Esso, infatti, monitora esclusivamente l'andamento della produzione
+energetica e i dati ambientali.
+%
+
+%
+Il secondo profilo, invece, si adatta meglio ad impianti grandi e complessi, dove, al fine di 
+diagnosticare eventuali cali di rendimento diventa utile monitorare con un livello di dettaglio
+maggiore.
+% END
