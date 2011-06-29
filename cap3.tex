@@ -248,7 +248,7 @@ Lo schema relazionale del database \`e mostrato in figura \ref{ermodel}.
 
 %
 L'applicazione \texttt{database} costituisce, nel contesto del datacenter, 
-l'unico punto di accesso al tale database. 
+l'unico punto di accesso alla memoria persistente.
 %
 Essa \`e interamente basata su \texttt{amnesia}\cite{erl-amnesia}, un wrapper Erlang 
 per MySQL, il quale fornisce sia le funzioni per interagire con il database, 
@@ -256,9 +256,7 @@ sia gli strumenti necessari a creare dei record erlang per la rappresentazione
 delle entry delle tabelle.
 %
 In particolare, per le tabelle dello schema relazionale in figura \ref{ermodel}, 
-sono stati automaticamente generati i record elencati nel listato \ref{code:database-record}.
-%
-
+\texttt{amnesia} ha generato i record elencati nel listato \ref{code:database-record}.
 %
 \begin{lstlisting}[caption={Record per interfacciamento con il database}, label={code:database-record},frame=trBL]
 -record (device_type, { ...
@@ -277,8 +275,7 @@ sono stati automaticamente generati i record elencati nel listato \ref{code:data
 %
 Il supervision tree dell'applicazione, mostrato in figura \ref{database-suptree}, \`e molto 
 semplice: sono presenti solo \Item{i} un supervisor e \Item{ii} un processo worker, 
-\texttt{data\_storage}, il quale implementa un server, sfruttando il behaviour OTP 
-\emph{gen\_server}\cite{gen-server}.
+\texttt{data\_storage}, il quale implementa il behaviour OTP \emph{gen\_server}\cite{gen-server}.
 %
 
 %
@@ -291,69 +288,82 @@ semplice: sono presenti solo \Item{i} un supervisor e \Item{ii} un processo work
 %
 
 %
+L'interfaccia di \texttt{data\_storage}, le cui funzioni pi\`u importanti sono 
+elencate nel listato \ref{code:data_storage_interface}, permettono di:
+%
+\begin{itemize}
+\item aggiungere un impianto
+\item modificare la configurazione di un impianto o di uno dei suoi componenti
+\item memorizzare i dati di monitoraggio, i.e. il valore delle grandezze monitorate e degli allarmi
+\end{itemize}
+%
 
 %
 \begin{lstlisting}[caption={Interfaccia del modulo \texttt{data\_storage}}, label={code:data_storage_interface},frame=trBL]
--export([start_link/0,
-
+-export([%% functions to add new entries
          add_new_device_type/2,
-         get_device_type/1,
-         get_device_type_info/1,
-
-         get_device_by_id/1,
-         get_measure_by_id/1,
-	 get_alarm_by_id/1,
-	 get_measures_by_device/1,
-
          add_new_inverter_type/3,
-         get_inverter_types/0,
-         get_inverter_type/1,
-
          add_new_panel_type/3,
-         get_panel_types/0,
-         get_panel_type/1,
-
+         ...
+         add_new_string/2,
+         add_new_inverter/2,
          add_new_plant_by_structure/7,
-         add_new_plant/6,
+         ...
+         set_plant_gateway/4,
+         set_string_transponder/6,
+         ...    
+         %% functions to store monitoring data
+         write_variables/1,
+         write_alarms/1,
+         ...
 
-         get_plants/0,
+         %% functions to query the db
          get_plant/1,
          get_plant_structure/1,
          get_plant_devices/1,
-	 get_plant_weather_station/1,
-         delete_plant/1,
-
-         get_plant_by_gateway_unique_id/1,
-
-         set_plant_gateway/4,
-         set_plant_power_transponder/5,
-
-         add_new_inverter/4,
-         get_plant_inverters/1,
-         get_inverter_by_description/2,
-         get_inverter_by_id/1,
-         set_inverter_transponder/5,
-
-         get_inverter_strings/1,
-
-         add_new_string/2,
-         add_new_string/3,
-         get_string_by_description/3,
-         set_string_transponder/6,
-         get_string_by_id/1,
-	 get_string_parameters/1,
-
-         get_string_panels/1,
-
-         write_variables/1,
-	 write_alarms/1,
-	 inc_energy_offset/1,
-         get_trend_by_device/3,
-         get_trend_by_device/4,
-	 get_latest_value/2
+         ...
+         get_trend_by_device/3
 	]).
 \end{lstlisting}
 %
+Il listato \ref{code:new_plant} riporta un esempio di come aggiungere un nuovo impianto
+a quelli gi\`a presenti. In particolare, l'esempio mostra come utilizzare la funzione 
+\texttt{add\_new\_plant\_by\_structure/7} per aggiungere un impianto costituito da un 
+solo inverter a da una sola stringa ad esso connessa.
+%
+Dopo aver creato il nuovo impianto, mediante la funzione \texttt{set\_plant\_gateway/4}
+viene memorizzato sul database anche l'indirizzo fisico del gateway dell'impianto.
+%
+
+%
+\begin{lstlisting}[caption={Inserimento di un nuovo impianto}, label={code:new_plant},frame=trBL]
+%% specify the string configuration
+%% i.e., its id and the configuration of each pv module
+String = {"String-01", 
+          [{"SOVELLO", "SV-X-200", "0000-0000"}]},
+
+%% tell data_storage to create the new plant
+data_storage:add_new_plant_by_structure (
+      _UniqueID = "MyPlant", 
+      _Location = "Nowhere",
+      _CustomerName = "Nobody", 
+      _Customer_ID = 0,
+      _Latitude = "0.0", 
+      _Longitude = "0.0",
+      %% just one inverter, with the string specified above
+      _Inverters = [{{"YURAKU", "I-3000"}, 
+                    "Inverter-00", "0000-0000-0000", 
+                    [String]} ]),
+    
+%% set the plant gateway
+data_storage:set_plant_gateway (
+      _Plant = {unique_id, "MyPlant"}, 
+      "E700001A", 
+      "", 
+      null).
+\end{lstlisting}
+%
+
 \section{L'applicazione \emph{sysconf}}
 %
 \begin{figure}[!h]
