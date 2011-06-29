@@ -367,8 +367,8 @@ data_storage:set_plant_gateway (
 %
 \section{L'applicazione \texttt{sysconf}}
 %
-L'applicazione \texttt{sysconf} costituisce un componente di supporto per 
-l'intero sistema. Essa comprende i processi mostrati in figura \ref{sysconfsuptree}.
+L'applicazione \texttt{sysconf} fa da supporto all'intero datacenter.
+Essa comprende i processi mostrati in figura \ref{sysconfsuptree}.
 %
 \begin{figure}[!h]
 \centering
@@ -380,36 +380,47 @@ l'intero sistema. Essa comprende i processi mostrati in figura \ref{sysconfsuptr
 
 %
 L'unico processo worker presente, \texttt{config\_server}, \`e responsabile della 
-gestione e della esposizione delle informazioni che costituiscono le configurazioni
-dei vari componenti del datacenter, tra cui, ad esempio, i \emph{path relativi} in 
-cui i \emph{gateway} copiano via FTP i file contenenti i dati di campo dei dispositivi.
+gestione e della pubblicazione delle informazioni che costituiscono le configurazioni
+dei vari componenti del datacenter. Tali informazioni comprendono,
 %
-Inoltre, si occupa di mantenere in memoria la configurazione aggiornata di ogni plant, 
-mediante l'uso di due tabelle: \texttt{plants} e \texttt{device\_per\_plant}. 
+\begin{itemize}
+\item le configurazioni dei vari \emph{endpoint} attraverso i quali i gateway possono
+      inviare i loro dati al datacenter; p.es. i \emph{path} in cui i \emph{gateway} 
+      trasferiscono, via FTP, i file contenenti i dati di campo dei dispositivi;
 %
-La prima associa, ad ogni impianto, l'elenco dei dispositivi in esso presenti. 
+\item le configurazioni dei vari impianti, i.e. quanti e quali dispositivi fanno 
+      parte di ogni impianto
+\end{itemize}
 %
-La seconda, invece, permette di risalire, dato l'identificatore di un dispositivo di 
-campo, all'impianto cui il dispositivo appartiene.
+Tali configurazioni sono mantenute nello \emph{stato} del processo: si tratta di un record 
+comprendente i seguenti campi:
 %
-Entrambe le tabelle sono parte dello \emph{stato} del processo, come indicato nel 
-listato \ref{code:sysconf-state}.
+\begin{itemize}
+\item \texttt{endpoints\_config}, un record erlang che mantiene le configurazioni dei 
+      vari endpoint del sistema
 %
-\begin{lstlisting}[caption={Stato del Config Server}, label={code:sysconf-state},frame=trBL]
--record(config_server_state, 
-        { config_dir,
-	  plants, %% table of {PlantID, [Device]}
-	  device_per_plant %% table of {Device, PlantID}
-	}).
-\end{lstlisting}
+\item \texttt{plants}, una tabella che associa, ad ogni impianto, l'elenco dei dispositivi 
+      in esso presenti
+%
+\item \texttt{device\_per\_plant}, una tabella che, dato l'identificatore di un dispositivo,
+      permette di risalire all'impianto cui il questo appartiene
+\end{itemize}
 %
 
 %
-La costruzione delle tabelle \`e effettuata durante l'inizializzazione del processo 
-\texttt{config\_server}, ed \`e mostrata nel listato \ref{code:sysconf-conf-making}.
-
+La generazione delle configurazioni \`e effettuata durante l'inizializzazione del processo, 
+come da listato \ref{code:sysconf-conf-making}.
 %
 \begin{lstlisting}[caption={Costruzione delle tabelle \texttt{plant} e \texttt{device\_per\_plant}}, label={code:sysconf-conf-making},frame=trBL]
+MultiConfigFile = 
+  ConfigDir ++ ?MAIN_CONFIGURATION_FILE,
+
+MultiConfigList = 
+  conf_manager:load_config(MultiConfigFile),
+
+ParsedConfig = 
+  get_configurations(ConfigDir,MultiConfigList),
+
 TableOptions = [set, private, named_table, 
                 {read_concurrency, true}],
 
@@ -435,6 +446,12 @@ lists:foreach (
       ets:insert (PlantConfigs, {PlantID, PlantConfig}),
       ets:insert (DeviceTable, DeviceEntries)
   end, Plants),
+
+State = #config_server_state { config_dir = ConfigDir,
+                               config = ParsedConfig,
+     		               plants = PlantConfigs,
+			       device_per_plant = DeviceTable
+			     },
 \end{lstlisting}
 %
 
