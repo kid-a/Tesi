@@ -205,6 +205,7 @@ seguenti motivi:
       scalare molto facilmente, come Ghodsi e Armstrong dimostrano in \cite{armstrongyaws}
 \end{itemize}
 %
+%% utilizzo di eunit
 
 %% architettura: insieme di erlang applications:
 \section{L'architettura del datacenter}
@@ -456,17 +457,44 @@ State = #config_server_state { config_dir = ConfigDir,
 %
 
 %
+Oltre al processo \texttt{config\_server}, il codice della applicazione \texttt{sysconf}
+contiene la definizione di un modulo \texttt{logger}, che sfrutta le funzionalit\`a
+offerte dalla libreria \emph{log4erl}\cite{log4erl}, al fine di offrire, la possibilit\`a 
+di memorizzare su file delle informazioni riguardo il loro stato d'esecuzione.
+%
+
+%
 \section{L'applicazione \emph{datamanager}}
 %
-%% bit syntax
+L'applicazione \texttt{datamanager} \`e il componente che si occupa di gestire il flusso 
+informativo originato dai gateway degli impianti monitorati, del filtraggio di tali 
+flussi informativi, e della memorizzazione dei dati filtrati sul database.
+%
+
+%
+Rispetto alle altre applicazioni costituenti del datacenter, il \texttt{datamanager} \`e 
+caratterizzato da un supervision tree, rappresentato in figura \ref{datamanagersuptree},
+pi\`u complesso: esso infatti \`e costituito da un processo \emph{root}, il quale supervisiona
+dei \emph{pool}, uno per ogni impianto da monitorare, ciascuno dei quali \`e costituito da un 
+supervisor e da due processi worker: \texttt{filter} e \texttt{file\_poller}
+%
 \begin{figure}[!h]
 \centering
 \includegraphics[width=380pt]{img/datamanager.png}
 \caption{Supervision tree dell'applicazione Datamanager}
+\label{datamanagersuptree}
 \end{figure}
 %
-\subsection{Il filter}
+
+%
 \subsection{Il file\_poller}
+%
+Il processo \texttt{file\_poller} costituisce uno degli endpoint del datacenter.
+%
+Esso, in particolare, si 
+
+
+%% bit syntax
 %
 \begin{figure}[!h]
 \centering
@@ -474,7 +502,96 @@ State = #config_server_state { config_dir = ConfigDir,
 \caption{Sequenza di polling}
 \end{figure}
 %
+
+%
+\begin{lstlisting}[caption={Decodifica dei dati}, label={code:decode_files},frame=trBL]
+decode_files ([File|Rest], Data, State) ->
+  Path = State#state.path,
+  Result = 
+    try
+     {ok, FileContent} = 
+       file:read_file (lists:concat ([Path, File])),
+                       ftp_protocol:decode (FileContent)
+		
+    catch error : {Reason, D} 
+      when (Reason == badmatch) or 
+           (Reason == badtimestamp) or
+           (Reason == badpreamble) or 
+           (Reason == unknown_device_class) -> 
+		
+      % mark the file as corrupted
+      insert_corrupted_file (
+        State#state.corrupted_transmissions,
+    	{parse_timestamp(File), File}), 
+      %% then, return no data
+      nil
+    end,
+    
+  case Result of 
+    {ok, {DeviceID, DecodedData}} ->
+      decode_files (Rest, 
+                    [{DeviceID, DecodedData} | Data], 
+                    State);
+    _->
+      decode_files (Rest, Data, State)
+  end.
+\end{lstlisting}
+%
+Il \texttt{file\_poller}, %% genera dei report
+
+%
+\begin{lstlisting}[caption={Esempio di report per dati mancanti}, label={code:report-missing-files},frame=trBL]
+Received transmission @ {{2011,6,24},{10,18,0}} --> files missing:
+    "FFFFFFFF10003000_07DB06180A1200.DAT"
+    "FFFFFFFF1000AA00_07DB06180A1200.DAT"
+    "FFFFFFFF1000A000_07DB06180A1200.DAT"
+    "FFFFFFFF10000300_07DB06180A1200.DAT"
+    "FFFFFFFF1000B000_07DB06180A1200.DAT"
+    "FFFFFFFF12000500_07DB06180A1200.DAT"
+Report generated @ {{2011,6,30},{0,30,40}}
+\end{lstlisting}
+%
+
+%
 \subsection{La decodifica: \emph{ftp\_protocol}}
-%% il supervision tree
+%% uso della bit syntax
+\begin{lstlisting}[caption={Decodifica di un blocco dati del Gateway}, label={code:decode-gateway},frame=trBL]
+decode_gateway_sample (TemixID, Year, DataBlock, N, Accumulator) ->
+    << Battery:2/big-unsigned-integer-unit:8,
+       Temperature:2/big-signed-integer-unit:8,
+       SolarPanelCurrent:2/big-signed-integer-unit:8,
+       Month:8,
+       DayOfMonth:8,
+       Hour:8,
+       Minute:8,
+       Rest/binary >> = DataBlock,
+       ...
+\end{lstlisting}
+%%
+
+
+%
+
+%
+
+\subsection{Il filter}
+%
+%% filtraggio e scalatura
+%% generazione aggregati
+\begin{figure}[!h]
+\centering
+\includegraphics[width=380pt]{img/filter.png}
+\caption{Rappresentazione grafica del processo filter}
+\label{filter}
+\end{figure}
+%
+
+%% \begin{lstlisting}[caption={Esempio di report per dati mancanti}, label={code:report-missing-files},frame=trBL]
+%% ScaledVars = scale_vars(DeviceID, MeasuredVars),
+%% %% process offsets, e.g. energy offset for the power transponder
+%% Vars = process_offsets (Plant, DeviceID, ScaledVars),
+%% %% write variables into the local cache   
+%% plant_status:batch_write_variables (Plant, DateTime, DeviceID, Vars),
 
 \section{Web Services}
+%% due parole sui web services
