@@ -160,14 +160,14 @@ together with supervisor and worker processes}\cite{cesarini09}.
 
 %
 Una sistema basato su OTP \`e, quindi, formato da un insieme di \emph{application} distribuite 
-e lascamente accoppiate, ciascuna delle quali implementa una determinata funzionlit\`a.
+e \emph{loosely coupled}, ciascuna delle quali implementa una determinata funzionlit\`a.
 %
 
 %
-\section{Perch\`e OTP}
+\section{Perch\'e OTP}
 %
-La scelta della piattaforma tecnologica su cui progettare e costruire il datacenter \`e 
-ricaduta su Erlang/OTP per i seguenti motivi:
+Si \`e scelto di progettare e costruire il datacenter sulla base di Erlang/OTP per i 
+seguenti motivi:
 %
 \begin{itemize}
 \item \emph{rapidit\`a di sviluppo}: come gi\`a visto, l'uso dei behaviour consente 
@@ -206,28 +206,59 @@ ricaduta su Erlang/OTP per i seguenti motivi:
 \end{itemize}
 %
 
-%% rapidita` di sviluppo di applicazioni complesse
-%% supporto per erlang applications: restart, etc.
-%% bit syntax
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 %% architettura: insieme di erlang applications:
 \section{L'architettura del datacenter}
 \label{datacenter-arch}
 %
+Il datacenter \`e costituito dalle seguenti applicazioni, ciascuna caratterizzata da un 
+proprio supervision tree:
+%
+\begin{itemize}
+\item \texttt{database}
+\item \texttt{sysconf}
+\item \texttt{datamanager}
+\end{itemize}
+%
+Oltre a queste tre applicazioni, il datacenter espone dei web service \emph{RESTful}, 
+sfruttando il web server \emph{yaws}\cite{yaws}.
+%
+
+%
 \section{L'applicazione \emph{database}}
+%
+Il datacenter si affida a un database MySQL\cite{mysql} per memorizzare in maniera persistente
+%
+\begin{itemize}
+\item la configurazione degli impianti sotto monitoraggio, 
+      i.e. quantit\`a, modello e numero di serie dei moduli, numero di stringhe, 
+      quantit\`a modello e numero degli inverter, associazioni tra stringa e inverter, ecc.
+%
+\item le informazioni ricevute dai componenti di campo
+\end{itemize}
+%
+Lo schema relazionale del database \`e mostrato in figura \ref{ermodel}.
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=400pt]{img/db-er-model.png}
+\caption{Diagramma ER del database}
+\label{ermodel}
+\end{figure}
+%
+
+%
+L'applicazione \texttt{database} costituisce, nel contesto del datacenter, 
+l'unico punto di accesso al tale database. 
+%
+Essa \`e interamente basata su \texttt{amnesia}\cite{erl-amnesia}, un wrapper Erlang 
+per MySQL, il quale fornisce sia le funzioni per interagire con il database, 
+sia gli strumenti necessari a creare dei record erlang per la rappresentazione 
+delle entry delle tabelle.
+%
+In particolare, per le tabelle dello schema relazionale in figura \ref{ermodel}, 
+sono stati automaticamente generati i record elencati nel listato \ref{code:database-record}.
+%
+
 %
 \begin{lstlisting}[caption={Record per interfacciamento con il database}, label={code:database-record},frame=trBL]
 -record (device_type, { ...
@@ -243,6 +274,22 @@ ricaduta su Erlang/OTP per i seguenti motivi:
 -record (measure_data, { ...
 -record (alarm_data, { ...
 \end{lstlisting}
+%
+Il supervision tree dell'applicazione, mostrato in figura \ref{database-suptree}, \`e molto 
+semplice: sono presenti solo \Item{i} un supervisor e \Item{ii} un processo worker, 
+\texttt{data\_storage}, il quale implementa un server, sfruttando il behaviour OTP 
+\emph{gen\_server}\cite{gen-server}.
+%
+
+%
+\begin{figure}[!h]
+\centering
+\includegraphics[width=180pt]{img/database.png}
+\caption{Supervision tree dell'applicazione Database}
+\label{database-suptree}
+\end{figure}
+%
+
 %
 
 %
@@ -357,6 +404,7 @@ lists:foreach (
 %
 \section{L'applicazione \emph{datamanager}}
 %
+%% bit syntax
 \begin{figure}[!h]
 \centering
 \includegraphics[width=380pt]{img/datamanager.png}
@@ -375,12 +423,4 @@ lists:foreach (
 \subsection{La decodifica: \emph{ftp\_protocol}}
 %% il supervision tree
 
-%
-\begin{figure}[!h]
-\centering
-\includegraphics[width=180pt]{img/database.png}
-\caption{Supervision tree dell'applicazione Database}
-\end{figure}
-%
-\cite{erl-amnesia}
 \section{Web Services}
