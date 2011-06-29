@@ -364,25 +364,52 @@ data_storage:set_plant_gateway (
 \end{lstlisting}
 %
 
-\section{L'applicazione \emph{sysconf}}
+%
+\section{L'applicazione \texttt{sysconf}}
+%
+L'applicazione \texttt{sysconf} costituisce un componente di supporto per 
+l'intero sistema. Essa comprende i processi mostrati in figura \ref{sysconfsuptree}.
 %
 \begin{figure}[!h]
 \centering
 \includegraphics[width=180pt]{img/sysconf.png}
 \caption{Supervision tree dell'applicazione Sysconf}
+\label{sysconfsuptree}
 \end{figure}
+%
+
+%
+L'unico processo worker presente, \texttt{config\_server}, \`e responsabile della 
+gestione e della esposizione delle informazioni che costituiscono le configurazioni
+dei vari componenti del datacenter, tra cui, ad esempio, i \emph{path relativi} in 
+cui i \emph{gateway} copiano via FTP i file contenenti i dati di campo dei dispositivi.
+%
+Inoltre, si occupa di mantenere in memoria la configurazione aggiornata di ogni plant, 
+mediante l'uso di due tabelle: \texttt{plants} e \texttt{device\_per\_plant}. 
+%
+La prima associa, ad ogni impianto, l'elenco dei dispositivi in esso presenti. 
+%
+La seconda, invece, permette di risalire, dato l'identificatore di un dispositivo di 
+campo, all'impianto cui il dispositivo appartiene.
+%
+Entrambe le tabelle sono parte dello \emph{stato} del processo, come indicato nel 
+listato \ref{code:sysconf-state}.
 %
 \begin{lstlisting}[caption={Stato del Config Server}, label={code:sysconf-state},frame=trBL]
 -record(config_server_state, 
         { config_dir,
-          config,
 	  plants, %% table of {PlantID, [Device]}
 	  device_per_plant %% table of {Device, PlantID}
 	}).
 \end{lstlisting}
 %
 
-\begin{lstlisting}[caption={Lettura della configurazione degli impianti}, label={code:sysconf-conf-making},frame=trBL]
+%
+La costruzione delle tabelle \`e effettuata durante l'inizializzazione del processo 
+\texttt{config\_server}, ed \`e mostrata nel listato \ref{code:sysconf-conf-making}.
+
+%
+\begin{lstlisting}[caption={Costruzione delle tabelle \texttt{plant} e \texttt{device\_per\_plant}}, label={code:sysconf-conf-making},frame=trBL]
 TableOptions = [set, private, named_table, 
                 {read_concurrency, true}],
 
