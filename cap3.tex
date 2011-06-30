@@ -476,7 +476,16 @@ Rispetto alle altre applicazioni costituenti del datacenter, il \texttt{datamana
 caratterizzato da un supervision tree, rappresentato in figura \ref{datamanagersuptree},
 pi\`u complesso: esso infatti \`e costituito da un processo \emph{root}, il quale supervisiona
 dei \emph{pool}, uno per ogni impianto da monitorare, ciascuno dei quali \`e costituito da un 
-supervisor e da due processi worker: \texttt{filter} e \texttt{file\_poller}
+supervisor e da due processi worker: un \texttt{filter} e un processo endpoint.
+%
+Esistono due tipi di endpoint: \texttt{file\_poller} e \texttt{sms\_manager}. Il primo costituisce
+l'endpoint di riferimento per i gateway configurati per trasmettere i loro dati mediante 
+protocollo FTP, il secondo, invece, per quei gateway che inviano i loro dati mediante \emph{sms}.
+%
+Si tratta di processi molto simili, motivo per cui, in questa trattazione, daremo spazio solo al
+\texttt{file\_poller}.
+%
+
 %
 \begin{figure}[!h]
 \centering
@@ -489,29 +498,76 @@ supervisor e da due processi worker: \texttt{filter} e \texttt{file\_poller}
 %
 \subsection{Il file\_poller}
 %
-Il processo \texttt{file\_poller} costituisce uno degli endpoint del datacenter.
+I gateway configurati per l'utilizzo del protocollo FTP inviano al datacenter, 
+ad intervalli regolari, un \emph{batch} di file contenenti, ciascuno:
 %
-Esso, in particolare, si 
+\begin{itemize}
+\item l'identificatore di un dispositivo di campo
+\item un insieme di valori campionati, ciascuno etichettato con un 
+      timestamp indicante la data e l'ora del rilevamento
+\item informazioni relative allo stato del dispositivo, 
+      p.es. lo stato della batteria
+\end{itemize}
+%
+Contestualmente ad ogni \emph{batch}, quale meccanismo di conferma, il gateway invia anche un 
+\emph{digest}, riportante l'elenco file inviati.
+%
 
-
-%% bit syntax
+%
+Compito del \emph{file\_poller} di un impianto \`e l'effettuazione, ad intervalli di tempo
+determinati, delle seguenti operazioni:
+%
+\begin{enumerate}
+\item controlla se il gateway ha trasferito nuovi file; se s\`i,
+\item decodifica il digest e leggi l'elenco dei file inviati
+\item decodifica il contenuto dei file
+\item \emph{passa} le informazioni decodificate al processo \texttt{filter} dell'impianto
+\item sposta i file decodificati in un archivio
+\item compila dei report riguardo
+      \begin{itemize}
+      \item eventuali dati non arrivati
+      \item eventuali dati \emph{malformati}
+      \end{itemize}
+\end{enumerate}
+%
+Questa sequenza di operazioni \`e modellata in figura \ref{fig:polling-sequence} come una
+macchina a stati finiti, in cui ogni stato rappresenta una funzione erlang definita nel 
+modulo \texttt{file\_poller}.
 %
 \begin{figure}[!h]
 \centering
 \includegraphics[width=300pt]{img/file-poller.png}
 \caption{Sequenza di polling}
+\label{fig:polling-sequence}
 \end{figure}
 %
 
 %
+Lo stato \texttt{decode\_files}, all'interno del quale avviene la decodifica dei singoli file,
+\`e caratterizzato da due archi \emph{self-connecting}: uno etichettato con \emph{more files}, 
+l'altro etichettato con \emph{skip files}.
+%
+La semantica di queste etichette rispecchia il comportamento della funzione corrispondente 
+allo stato \texttt{decode\_files}, riportata nel listato \ref{code:decode_files}. A tale funzione 
+va passata la lista dei file da decodificare, lei provveder\`a a decodificarne il primo; quindi, 
+se ci saranno ancora \emph{altri file} da decodificare, chiamer\`a se stessa ricorsivamente; 
+se la decodifica dovesse fallire (ad esempio perch\`e il formato del file non \`e corretto), 
+la funzione \emph{ignorer\`a} quel file e prover\`a a decodificare i rimanenti.
+%
+
+%
 \begin{lstlisting}[caption={Decodifica dei dati}, label={code:decode_files},frame=trBL]
+decode_files ([], Data, State) -> lists:reverse (Data);
+
 decode_files ([File|Rest], Data, State) ->
   Path = State#state.path,
   Result = 
     try
      {ok, FileContent} = 
        file:read_file (lists:concat ([Path, File])),
-                       ftp_protocol:decode (FileContent)
+                       ftp_protocol:decode (FileContent),
+
+     ftp_protocol:decode (FileContent)
 		
     catch error : {Reason, D} 
       when (Reason == badmatch) or 
@@ -537,8 +593,24 @@ decode_files ([File|Rest], Data, State) ->
   end.
 \end{lstlisting}
 %
-Il \texttt{file\_poller}, %% genera dei report
 
+%
+Dal listato \ref{code:decode_files} \`e possibile vedere che il \texttt{file\_poller}, rilevato
+un file corrotto, invoca la funzione \texttt{insert\_corrupted\_file/2}. Compito di questa funzione 
+\`e quello di memorizzare il file corrotto all'interno della \emph{tabella dei file corrotti}, 
+i.e. una tabella facente parte dello stato del \texttt{file\_poller}, il cui scopo \`e quello
+di tenere traccia dei file corrotti ricevuti.
+%
+
+%
+Utilizzando lo stesso approccio, il \texttt{file\_poller} tiene anche traccia dei file \emph{missing}, 
+i.e. di quei file indicati nei digest inviati dal gateway ma non ricevuti.
+%
+
+%
+Ad intervalli di tempo determinati, il contenuto delle tabelle viene utilizzato per compilare dei 
+\emph{report}, come quello riportato nel listato \ref{code:report-missing-files}, che vengono 
+successivamente salvati su file.
 %
 \begin{lstlisting}[caption={Esempio di report per dati mancanti}, label={code:report-missing-files},frame=trBL]
 Received transmission @ {{2011,6,24},{10,18,0}} --> files missing:
@@ -553,8 +625,29 @@ Report generated @ {{2011,6,30},{0,30,40}}
 %
 
 %
+Scopo dei report \`e quello di fornire rapidamente delle informazioni precise utili a diagnosticare 
+eventuali \emph{fault} di uno qualsiasi dei componenti di campo del sistema di monitoraggio.
+%
+
+%
 \subsection{La decodifica: \emph{ftp\_protocol}}
-%% uso della bit syntax
+%
+I file contenenti i dati di monitoraggio inviati dal gateway non hanno tutti lo stesso formato.
+%
+Esso varia, in generale, a seconda del tipo di dispositivo di campo. Per questo motivo, 
+l'operazione di decodifica dei file \`e delegata a un modulo, \texttt{ftp\_protocol}, 
+il quale \`e in grado di riconoscere il formato di un file e, quindi, di decodificarlo 
+correttamente.
+%
+
+%
+Le funzioni di decodifica di \texttt{ftp\_protocol} fanno sfruttano la \emph{bit syntax}, una 
+sintassi per espressioni Erlang in grado di rappresentare dati binari \emph{raw}.
+%
+Un esempio d'uso di tali espressioni \`e contenuto nel listato \ref{code:decode-gateway}: si tratta
+delle prime righe della funzione \texttt{decode\_gateway\_sample}, il cui compito \`e quello di 
+decodificare il singolo campione dati ricevuto da un gateway.
+%
 \begin{lstlisting}[caption={Decodifica di un blocco dati del Gateway}, label={code:decode-gateway},frame=trBL]
 decode_gateway_sample (TemixID, Year, DataBlock, N, Accumulator) ->
     << Battery:2/big-unsigned-integer-unit:8,
@@ -567,8 +660,7 @@ decode_gateway_sample (TemixID, Year, DataBlock, N, Accumulator) ->
        Rest/binary >> = DataBlock,
        ...
 \end{lstlisting}
-%%
-
+%
 
 %
 
@@ -576,6 +668,7 @@ decode_gateway_sample (TemixID, Year, DataBlock, N, Accumulator) ->
 
 \subsection{Il filter}
 %
+blah
 %% filtraggio e scalatura
 %% generazione aggregati
 \begin{figure}[!h]
