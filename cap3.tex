@@ -497,7 +497,7 @@ Si tratta di processi molto simili, motivo per cui, in questa trattazione, darem
 
 %
 \subsection{Il file\_poller}
-%
+%% implementa gen_server
 I gateway configurati per l'utilizzo del protocollo FTP inviano al datacenter, 
 ad intervalli regolari, un \emph{batch} di file contenenti, ciascuno:
 %
@@ -663,14 +663,37 @@ decode_gateway_sample (TemixID, Year, DataBlock, N, Accumulator) ->
 %
 
 %
-
-%
-
 \subsection{Il filter}
+%% implementa gen_server
+Il processo \texttt{filter} si occupa del \emph{filtraggio} dei dati di monitoraggio, i.e.
+\begin{itemize}
+\item scalare i valori di alcune grandezze, in base alle unit\`a di misura che si desidera
+      utilizzare per la loro rappresentazione
 %
-blah
-%% filtraggio e scalatura
-%% generazione aggregati
+\item incrementare gli offset delle misure di energia, nel caso venga rilevato un \emph{overflow}
+%
+\item stimare grandezze aggregate
+%
+\item memorizzare i dati ricevuti sul database
+%
+\item 
+\end{itemize}
+%
+I processi \texttt{filter} lavorano a stretto contatto con gli endpoint di un impianto. 
+%
+Espongono una funzione d'interfaccia, \texttt{put\_variables/4}, la quale consente di passare loro
+i dati di monitoraggio.
+%
+
+%
+L'attivit\`a svolta a \emph{run-time} dal processo \texttt{filter} sono schematizzate in 
+figura \ref{filter}: 
+%% da una parte, ogni volta che viene invocata la funzione put_variables si processano i dati
+%% dall'altra, a intervalli di tempo prestabiliti, vengono calcolati gli aggregati sulla base
+%% dei dati gia` presenti nel db
+
+
+%
 \begin{figure}[!h]
 \centering
 \includegraphics[width=380pt]{img/filter.png}
@@ -679,12 +702,13 @@ blah
 \end{figure}
 %
 
-%% \begin{lstlisting}[caption={Esempio di report per dati mancanti}, label={code:report-missing-files},frame=trBL]
-%% ScaledVars = scale_vars(DeviceID, MeasuredVars),
-%% %% process offsets, e.g. energy offset for the power transponder
-%% Vars = process_offsets (Plant, DeviceID, ScaledVars),
-%% %% write variables into the local cache   
-%% plant_status:batch_write_variables (Plant, DateTime, DeviceID, Vars),
+%
+
+
+
+%% filtraggio e scalatura
+%% generazione aggregati
+%
 
 \section{Web Services}
 %% due parole sui web services restful
