@@ -708,5 +708,163 @@ Al termine di ciascuna \emph{tranche} di attivit\`a, i dati risultati vengono me
 database, mediante l'invocazione della funzione \texttt{data\_storage:write/4}.
 %
 
+%
+\subsubsection{Filtraggio dati di campo}
+%
+Come gi\`a detto, l'attivit\`a di filtraggio dei dati di campo \`e viene effettuata a seguito 
+di una invocazione della funzione di interfaccia \texttt{put\_variables}. Tale chiamata viene
+\emph{gestita} dal codice riportato nel listato \ref{code:data-filtering}.
+%
+\begin{lstlisting}[caption={Filtraggio dei dati di campo}, label={code:data-filtering},frame=trBL]
+handle_call({put_variables, DateTime, 
+             DeviceID, MeasuredVars}, _From, State) ->
+    Plant = State#state.plant,
+
+    ScaledVars = scale_vars(DeviceID, MeasuredVars),
+    Vars = process_offsets(Plant, DeviceID, ScaledVars),
+    data_storage:write_variables([{DateTime, Vars}]),
+
+    {reply, ok, State};
+\end{lstlisting}
+%
+
+%
+Come esempio di filtraggio dati, il listato \ref{code:scale-vars} riporta un frammento della 
+definizione della funzione \texttt{scale\_vars/4}. In particolare, si tratta della porzione di 
+definizione che si occupa di \emph{scalare} i valori delle grandezze monitorate 
+dai Power/Inverter Transponder.
+%
+Tali conversioni di scala sono necessarie al fine di rendere i dati di campo \emph{consistenti} 
+rispetto alle unit\`a di misura con cui il datacenter li rappresenter\`a.
+%
+\begin{lstlisting}[caption={\emph{Scaling} delle misure del Power Transponder}, label={code:scale-vars},frame=trBL]
+scale_vars (_, _, [], Acc) -> lists:reverse(Acc);
+%%
+scale_vars (DT, ID, [{"current" ++ RN, V} | R], Acc) 
+    when (DT == "POWER-TRANSPONDER") or 
+         (DT == "INVERTER-TRANSPONDER") ->
+    scale_vars (DT, ID, R, 
+                [{"current" ++ RN, V / 1000.0} | Acc]);
+%%
+scale_vars (DT, ID, [{"frequency" ++ RN, V} | R], Acc)
+    when (DT == "POWER-TRANSPONDER") or 
+         (DT == "INVERTER-TRANSPONDER") ->
+    scale_vars (DT, ID, R, 
+                [{"frequency" ++ RN, V / 100.0} | Acc]);
+%%
+scale_vars (DT, ID, [{"voltage" ++ RN, V} | R], Acc)
+    when (DT == "POWER-TRANSPONDER") or 
+         (DT == "INVERTER-TRANSPONDER") ->
+    scale_vars (DT, ID, R, 
+                [{"voltage" ++ RN, V / 100.0} | Acc]);
+%%
+scale_vars(DT, ID, [{"active-power" ++ RN, V} | R], Acc)
+    when (DT == "POWER-TRANSPONDER") or 
+         (DT == "INVERTER-TRANSPONDER") ->
+    scale_vars (DT, ID, R, 
+                [{"active-power" ++ RN, V / 100.0} | Acc]);
+%%
+scale_vars(DT, ID, [{"reactive-power" ++ RN, V} | R], Acc)
+    when (DT == "POWER-TRANSPONDER") or 
+    (DT == "INVERTER-TRANSPONDER") ->
+    scale_vars (DT, ID, R, 
+                [{"reactive-power" ++ RN, V / 100.0} | Acc]);
+%%
+scale_vars(DT, ID, [{"power-factor" ++ RN, V} | R], Acc)
+    when (DT == "POWER-TRANSPONDER") or 
+         (DT == "INVERTER-TRANSPONDER") ->
+    scale_vars (DT, ID, R, 
+                [{"power-factor" ++ RN, V / 1000.0} | Acc]);
+\end{lstlisting}
+%
+
+%
+\subsubsection{Calcolo dei valori aggregati}
+%
+Per ogni dispositivo di campo sono stati definiti dei valori aggregati, i.e. delle 
+grandezze stimabili a partire dai dati di campo. 
+%
+Ad esempio, per i Power/Inverter Transponder sono stati definiti i seguenti due 
+aggregati:
+%
+\begin{itemize}
+\item potenza attiva totale, i.e. la somma delle potenze attive rilevate su 
+      ciascuna delle tre fasi
+\item potenza reattiva totale, i.e. la somma delle potenze reattive rilevate su
+      ciascuna delle tre fasi 
+\end{itemize}
+%
+
+%
+Il numero e il nome dei valori aggregati da calcolare per ciascuno dispositivo
+sono stati \emph{cablati} nel codice mediante la definizione di funzioni 
+come quella riportata nel listato \ref{code:aggregate-definition}.
+%
+\begin{lstlisting}[caption={Definizione degli aggregati per il Power/Inverter Transponder}, label={code:aggregate-definition},frame=trBL]
+power_transponder_aggregates () ->
+    ["active-power",
+     "reactive-power"].
+\end{lstlisting}
+%
+
+%
+Ovviamente, non basta cablare nel codice il nome degli aggregati, occorre anche 
+indicare \emph{come} calcolarli.
+%
+Per ciascun valore aggregato \`e stata quindi definita una funzione.
+%
+Il listato \ref{code:aggregate-total-active-power}, ad esempio, riporta il codice 
+utilizzato per il calcolo della potenza attiva totale di un power transponder: 
+si parte da un istante temporale corrispondente a un campionamento delle variabili di 
+campo, \texttt{Timestamp}, e si cercano i valori di potenza attiva rilevati in prossimit\`a
+di quell'istante mediante la funzione \texttt{data\_storage:get\_trend\_by\_device}.
+%
+Una volta ottenuti i valori cercati, la potenza attiva totale \`e calcolata effettuando,
+banalmente, lo loro somma.
+%
+\begin{lstlisting}[caption={Calcolo della potenza attiva totale}, label={code:aggregate-total-active-power},frame=trBL]
+{F, T} = get_two_minutes_interval_bounds (Timestamp),
+{ok, {_, Vars}} = 
+  data_storage:get_trend_by_device (DeviceID, F, T, 
+   			           ["active-power-l1",
+                                   "active-power-l2",
+				   "active-power-l3"]),
+	      
+PropList = measure_data_to_proplist (Vars),
+P1  = proplists:get_value ("active-power-l1", PropList),
+P2  = proplists:get_value ("active-power-l2", PropList),
+P3  = proplists:get_value ("active-power-l3", PropList),
+	      
+TotalActivePower = P1 + P2 + P3, 
+...
+\end{lstlisting}
+%
+
+%
 \section{Web Services}
-%% due parole sui web services restful
+
+
+%% definizione del wsdl
+
+\begin{lstlisting}[caption={Servizio \texttt{plant\_list}}, label={code:restful-ws},frame=trBL]
+<erl>
+
+out(A) ->
+  {ok, PlantList} = data_storage:get_plants(),
+  Reply = xml_translator:make_plant_list_response (PlantList),
+  {html, Reply}.
+
+</erl>
+\end{lstlisting}
+
+
+%% sistemare spazi non devono essere visibili
+\begin{lstlisting}[caption={Risposta al servizio \texttt{plant\_list}}, label={code:restful-ws-reply},frame=trBL]
+<?xml version="1.0"?>
+<plant_list_response>
+  <plant id="1" unique_id="plant-1" customer_id="0" customer_name="Customer1" location="Catania" latitude="37.546483" longitude="15.087973"/>
+  <plant id="2" unique_id="plant-2" customer_id="1" customer_name="Customer2" location="Roma" latitude="41.782489" longitude="12.448508"/>
+</plant_list_response>
+\end{lstlisting}
+
+
