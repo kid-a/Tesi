@@ -672,26 +672,29 @@ Il processo \texttt{filter} si occupa del \emph{filtraggio} dei dati di monitora
 %
 \item incrementare gli offset delle misure di energia, nel caso venga rilevato un \emph{overflow}
 %
-\item stimare grandezze aggregate
+\item stimare grandezze \emph{aggregate}
 %
 \item memorizzare i dati ricevuti sul database
 %
-\item 
 \end{itemize}
 %
 I processi \texttt{filter} lavorano a stretto contatto con gli endpoint di un impianto. 
 %
-Espongono una funzione d'interfaccia, \texttt{put\_variables/4}, la quale consente di passare loro
-i dati di monitoraggio.
+Espongono loro una funzione d'interfaccia, \texttt{put\_variables/4}, mediante la quale 
+questi ultimi possono passargli i dati di monitoraggio ricevuti e decodificati.
 %
 
 %
-L'attivit\`a svolta a \emph{run-time} dal processo \texttt{filter} sono schematizzate in 
-figura \ref{filter}: 
-%% da una parte, ogni volta che viene invocata la funzione put_variables si processano i dati
-%% dall'altra, a intervalli di tempo prestabiliti, vengono calcolati gli aggregati sulla base
-%% dei dati gia` presenti nel db
-
+Le attivit\`a svolte a \emph{run-time} dal processo \texttt{filter} sono schematizzate in 
+figura \ref{filter}: nella parte superiore \`e rappresentata l'attivit\`a di filtraggio 
+dei dati di campo; il \emph{triggering event} di questa attivit\`a \`e l'invocazione della 
+funzione \texttt{put\_variables/4}.
+%
+Nella parte inferiore, invece, \`e rappresentata l'attivit\`a di calcolo delle grandezze 
+\emph{aggregate}. A differenza della prima, il \emph{triggering event} di questa attivit\`a
+\`e sincrono, trattandosi di un evento generato internamente al processo stesso: 
+\`e l'azzeramento di un timer locale, configurabile con un parametro \texttt{aggregates\_period}.
+%
 
 %
 \begin{figure}[!h]
@@ -701,13 +704,8 @@ figura \ref{filter}:
 \label{filter}
 \end{figure}
 %
-
-%
-
-
-
-%% filtraggio e scalatura
-%% generazione aggregati
+Al termine di ciascuna \emph{tranche} di attivit\`a, i dati risultati vengono memorizzati sul 
+database, mediante l'invocazione della funzione \texttt{data\_storage:write/4}.
 %
 
 \section{Web Services}
