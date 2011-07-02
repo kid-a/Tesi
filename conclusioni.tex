@@ -1,5 +1,17 @@
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Sviluppi futuri}
+Ecco un elenco di punti su cui lavorare per lo sviluppo futuro della soluzione proposta
+in questa tesi:
+%
 \begin{itemize}
-\item implementazione sistema diagnostico
+\item sicurezza delle comunicazioni tra impianto e datacenter:
+      allo stato attuale, i dati di campo vengono trasmessi \emph{in chiaro} dal gateway al datacenter, 
+      attraverso internet; inoltre, lo stesso meccanismo di autenticazione del gateway presso il datacenter 
+      \`e \emph{poco sicuro}, trattandosi, di fatto, dello schema di autenticazione previsto da FTP;
+%      
+\item implementazione di un \emph{sistema esperto} per la diagnosi automatica dei malfunzionamenti:
+      allo stato attuale, infatti, il datacenter \`e gi\`a in grado di produrre dei semplici report
+      sui malfunzionamenti dell'impianto; tuttavia, \`e possibile implementare un livello di analisi
+      pi\`u raffinato basato, ad esempio, sul confronto tra i trend delle grandezze monitorate,
+      al fine di scoprire inefficienze nascoste
 \end{itemize}
