@@ -842,23 +842,39 @@ TotalActivePower = P1 + P2 + P3,
 
 %
 \section{Web Services}
+Il datacenter fornisce l'accesso ai dati di monitoraggio mediante dei \emph{web services
+RESTful}, i quali sono stati implementati utilizzando l'approccio descritto da Steve 
+Vinoski in \cite{vinoski}: tale approccio consiste nell'inserire la definizione di una
+funione \texttt{out/1} all'interno di una pagina con estensione .yaws.
+%
+Il web server Yaws, su richiesta, esegue la funzione e restituisce una pagina il cui contenuto
+\`e determinato dal risultato restituito.
+%
 
-
-%% definizione del wsdl
-
+%
+Vediamo, ad esempio, l'implementazione del servizio \texttt{plant\_list}, il quale restituisce 
+l'elenco degli impianti registrati presso il datacenter.
+%
+Il codice contenuto in \texttt{plant\_list.yaws} \`e riportato nel listato \ref{code:restful-ws}:
+come prima cosa, si interroga il database per ottenere la lista degli impianti; quest'ultima viene 
+quindi processata dal modulo \texttt{xml\_translator}, al fine di ottenerne una rappresentazione
+codificata in XML.
+%
 \begin{lstlisting}[caption={Servizio \texttt{plant\_list}}, label={code:restful-ws},frame=trBL]
 <erl>
 
 out(A) ->
   {ok, PlantList} = data_storage:get_plants(),
-  Reply = xml_translator:make_plant_list_response (PlantList),
+  Reply = 
+    xml_translator:make_plant_list_response (PlantList),
   {html, Reply}.
 
 </erl>
 \end{lstlisting}
+%
 
-
-%% sistemare spazi non devono essere visibili
+Il listato \ref{code:restful-ws-reply} contiene un esempio di risposta al servizio \texttt{plant\_list}.
+%
 \begin{lstlisting}[caption={Risposta al servizio \texttt{plant\_list}}, label={code:restful-ws-reply},frame=trBL]
 <?xml version="1.0"?>
 <plant_list_response>
