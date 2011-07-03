@@ -2,9 +2,9 @@
 \lstset{language=erlang, basicstyle=\small\ttfamily, keywordstyle=\color{black}, stringstyle=\color{black}, numbers=left, lineskip=0.4\baselineskip, breaklines=true}
 \chapter{Il datacenter}\label{sec:datacenter}
 %
-Il datacenter \`e il componente del sistema responsabile della elaborazione 
+Del sistema implementato, il datacenter \`e il componente responsabile della elaborazione 
 del flusso informativo generato dai dispositivi \emph{di campo} installati 
-presso i vari impianti sotto monitoraggio.
+presso i vari impianti monitorati.
 %
 Si tratta di un sistema software costituito da diverse applicazioni, ciascuna 
 delle quali implementa una o pi\`u delle funzionalit\`a tra quelle riportate di seguito:
@@ -23,8 +23,8 @@ delle quali implementa una o pi\`u delle funzionalit\`a tra quelle riportate di 
 Dall'elenco delle funzionalit\`a, \`e facile osservare come il
 datacenter ricopra un ruolo fondamentale all'interno del sistema di monitoraggio: 
 si tratta di un componente \emph{critico}, un suo malfunzionamento 
-(ad esempio uno \emph{shutdown} dovuto a un \emph{crash}) puo` avere effetti che 
-vanno dalla semplice interruzione del servizio di accesso ai dati degli impianti 
+(ad esempio uno \emph{shutdown} dovuto a un \emph{crash}) pu\`o avere effetti che 
+vanno dalla semplice interruzione del servizio di accesso ai dati degli impianti, 
 fino alla mancata decodifica dei dati provenienti dai dispositivi di campo e, 
 quindi, al blocco \emph{de facto} dell'intero sistema di monitoraggio.
 %
@@ -37,7 +37,7 @@ sono:
 \item \emph{liveness}, i.e. una volta verificatosi un evento di interesse, 
 il datacenter deve, prima o poi, gestirlo; tale propriet\`a serve a garantire, ad 
 esempio, che ogni \emph{batch} di dati provenienti dai dati di campo venga, 
-presto o tardi, processato.
+presto o tardi, processato
 %
 \item \emph{high availability}, i.e. il datacenter deve essere costantemente 
 in esecuzione, salvo \emph{downtime} programmati per operazioni quali 
@@ -45,19 +45,19 @@ aggiornamento release, etc.
 %
 \item \emph{reliability}, i.e. l'esecuzione del datacenter non deve essere 
 compromessa da situazioni anomale quali, ad esempio, la ricezione di dati 
-\emph{malformati} da parte di dispositivi di campo in avaria. Il datacenter 
-deve essere in grado di rilevare potenziali anomalie.%% e segnalarle?
+\emph{malformati} da parte di dispositivi di campo in avaria; il datacenter 
+deve essere in grado di rilevare potenziali anomalie
 %
 \item \emph{scalability}, i.e. le prestazioni del datacenter non devono 
-decrescere all'aumentare del numero di impianti, e, quindi del numero di 
-flussi informativi, da monitorare. %% e se un giorno volessi distribuire il datacenter?
+decrescere all'aumentare del numero di impianti monitorati, e, quindi del numero di 
+flussi informativi da gestire
 %
 \end{itemize}
 %% dire due parole sul fatto che sono proprieta` note?
 %
 
 %
-Tali propriet\`a hanno fortemente condizionato il successivo \emph{step} di
+L'individuazione di tali propriet\`a ha fortemente condizionato il successivo \emph{step} di
 progettazione, ovvero la scelta della \emph{tecnologia} su cui costruire il 
 datacenter, che \`e, infine, ricaduta su Erlang/OTP.
 %
@@ -66,7 +66,7 @@ datacenter, che \`e, infine, ricaduta su Erlang/OTP.
 Il prossimo paragrafo introdurr\`a OTP, soffermandosi su alcuni dei suoi aspetti 
 chiave; il paragrafo successivo analizzer\`a le motivazioni che hanno portato alla 
 sua scelta quale piattaforma tecnologica; il resto del capitolo, infine, \`e dedicato 
-ad alla descrizione dell'architettura e dei componenti del datacanter.
+ad alla descrizione dell'architettura e dei componenti del datacenter.
 %
 
 %
@@ -116,24 +116,24 @@ un processo Erlang, mediante l'implementazione di opportune \emph{callback}.
 %
 \subsection{Supervision Tree}
 %
-Esistono due particolari classi di behaviours: \emph{worker} e \emph{supervisor}\cite{otpsupervisor}; 
+Esistono due particolari classi di behaviour: \emph{worker} e \emph{supervisor}\cite{otpsupervisor}; 
 %
 i primi rappresentano i processi che si occupano di effettuare \emph{concretamente} del lavoro, 
 p.es. \emph{servers}, \emph{event handlers}, \emph{finite state machines}, ecc.
 %
 i secondi, invece, si occupano di supervisionare i propri \emph{figli}, i quali possono essere sia
-worker che, a loro volta, dei supervisors. 
+worker che, a loro volta, dei supervisor. 
 %
 Tra le responsabilit\`a di un supervisor vi sono:
 \begin{itemize}
 \item \emph{avviare} i processi i figli
-\item (opzionalmente) \emph{riavviare} i processi figli in caso di \emph{fault}
 \item \emph{terminare} i processi figli al termine dell'applicazione
+\item (opzionalmente) \emph{riavviare} i processi figli in caso di \emph{fault}
 \end{itemize}
 %
 
 %
-Il \emph{supervision tree} non \`e altro che una rappresentazione delle relazioni di supervisione 
+Il \emph{supervision tree} \`e una rappresentazione delle relazioni di supervisione 
 all'interno di un sistema basato su OTP.
 %
 \begin{figure}[!h]
@@ -149,18 +149,18 @@ all'interno di un sistema basato su OTP.
 \subsection{Applications}
 %
 I supervision tree costituiscono, in un certo senso, lo \emph{scheletro} di ogni applicazione
-basata su OTP. Esiste, infatti, un behaviour detto \emph{application}\cite{otpapplication}, 
+basata su OTP. Esiste, infatti, un behaviour detto \emph{application}\cite{erlapplication}, 
 il cui ruolo \`e quello di raggruppare un insieme di supervision trees, rendendoli 
 \emph{riusabili}. 
 %
 
 %
-In generale, una applicazione OTP \emph{is a reusable component that packages library modules 
+In generale, una applicazione OTP \`e un \emph{reusable component that packages library modules 
 together with supervisor and worker processes}\cite{cesarini09}.
 
 %
-Una sistema basato su OTP \`e, quindi, formato da un insieme di \emph{application} distribuite 
-e \emph{loosely coupled}, ciascuna delle quali implementa una determinata funzionlit\`a.
+Una sistema basato su OTP \`e, generalmente, formato da un insieme di \emph{application} distribuite 
+e \emph{loosely coupled}, ciascuna delle quali implementa una determinata funzionalit\`a.
 %
 
 %
@@ -186,7 +186,7 @@ seguenti motivi:
       configurati per riavviare i loro worker nel caso in cui questi dovessero, per 
       un qualunque motivo, terminare la loro esecuzione in maniera anormale, i.e. 
       andare in \emph{crash}; ci\`o consente, di fatto, alle applicazioni stesse di
-      riavviarsi a seguito di una condizione anomala; OTP elimina persino la necessit\`a
+      riavviarsi a seguito di una condizione anomala; ; OTP elimina persino la necessit\`a
       di mandare offline una applicazione per un \emph{release upgrade}, in quanto 
       supporta l'\emph{hot code swap}
 %
@@ -194,11 +194,11 @@ seguenti motivi:
       possibilit\`a che i processi possano andare in crash; piuttosto che tentare 
       di prevenire questa eventualit\`a, il linguaggio mette a disposizione gli 
       strumenti necessari per \Item{i} rilevare i crash e \Item{ii} pianificare 
-      delle strategie di recupero, e, quindi, per creare sistemi caratterizzati 
-      da un elevato grado di \emph{reliability} e \emph{fault tolerance}\cite{armstrongreliability}
+      delle strategie di recupero; i sistemi basati su Erlang sono noti per il loro  
+      elevato grado di \emph{reliability} e \emph{fault tolerance}\cite{armstrongreliability}
 %
 \item \emph{scalabilit\`a}: uno degli aspetti chiave di Erlang \`e il suo supporto nativo 
-      e \emph{sui generis} per la concorrenza; a differenza di altri linguaggi di programmazione, 
+      per la concorrenza; a differenza di altri linguaggi di programmazione, 
       infatti, il modello di concorrenza  implementato da Erlang \`e totalmente indipendente da 
       quello del sottostante sistema operativo, i.e. non esiste un mapping 1-a-1 tra processi 
       Erlang e processi di sistema; ci\`o consente alle applicazioni scritte in Erlang di 
@@ -225,7 +225,7 @@ sfruttando il web server \emph{yaws}\cite{yaws}.
 %
 
 %
-\section{L'applicazione \emph{database}}
+\section{L'applicazione \texttt{database}}
 %
 Il datacenter si affida a un database MySQL\cite{mysql} per memorizzare in maniera persistente
 %
@@ -253,7 +253,7 @@ l'unico punto di accesso alla memoria persistente.
 %
 Essa \`e interamente basata su \texttt{amnesia}\cite{erl-amnesia}, un wrapper Erlang 
 per MySQL, il quale fornisce sia le funzioni per interagire con il database, 
-sia gli strumenti necessari a creare dei record erlang per la rappresentazione 
+sia gli strumenti necessari a creare dei record Erlang per la rappresentazione 
 delle entry delle tabelle.
 %
 In particolare, per le tabelle dello schema relazionale in figura \ref{ermodel}, 
@@ -368,7 +368,7 @@ data_storage:set_plant_gateway (
 %
 \section{L'applicazione \texttt{sysconf}}
 %
-L'applicazione \texttt{sysconf} fa da supporto all'intero datacenter.
+L'applicazione \texttt{sysconf} fa da supporto alle altre applicazioni del datacenter.
 Essa comprende i processi mostrati in figura \ref{sysconfsuptree}.
 %
 \begin{figure}[!h]
@@ -459,12 +459,12 @@ State = #config_server_state { config_dir = ConfigDir,
 %
 Oltre al processo \texttt{config\_server}, il codice della applicazione \texttt{sysconf}
 contiene la definizione di un modulo \texttt{logger}, che sfrutta le funzionalit\`a
-offerte dalla libreria \emph{log4erl}\cite{log4erl}, al fine di offrire, la possibilit\`a 
+offerte dalla libreria \emph{log4erl}\cite{log4erl}, al fine di offrire la possibilit\`a 
 di memorizzare su file delle informazioni riguardo il loro stato d'esecuzione.
 %
 
 %
-\section{L'applicazione \emph{datamanager}}
+\section{L'applicazione \texttt{datamanager}}
 %
 L'applicazione \texttt{datamanager} \`e il componente che si occupa di gestire il flusso 
 informativo originato dai gateway degli impianti monitorati, del filtraggio di tali 
@@ -475,7 +475,7 @@ flussi informativi, e della memorizzazione dei dati filtrati sul database.
 Rispetto alle altre applicazioni costituenti del datacenter, il \texttt{datamanager} \`e 
 caratterizzato da un supervision tree, rappresentato in figura \ref{datamanagersuptree},
 pi\`u complesso: esso infatti \`e costituito da un processo \emph{root}, il quale supervisiona
-dei \emph{pool}, uno per ogni impianto da monitorare, ciascuno dei quali \`e costituito da un 
+dei \emph{pool} di processi, uno per ogni impianto da monitorare, ciascuno dei quali \`e costituito da un 
 supervisor e da due processi worker: un \texttt{filter} e un processo endpoint.
 %
 Esistono due tipi di endpoint: \texttt{file\_poller} e \texttt{sms\_manager}. Il primo costituisce
@@ -496,14 +496,14 @@ Si tratta di processi molto simili, motivo per cui, in questa trattazione, darem
 %
 
 %
-\subsection{Il file\_poller}
+\subsection{Il \texttt{file\_poller}}
 %% implementa gen_server
 I gateway configurati per l'utilizzo del protocollo FTP inviano al datacenter, 
 ad intervalli regolari, un \emph{batch} di file contenenti, ciascuno:
 %
 \begin{itemize}
 \item l'identificatore di un dispositivo di campo
-\item un insieme di valori campionati, ciascuno etichettato con un 
+\item un insieme di valori campionati dal dispositivo, ciascuno etichettato con un 
       timestamp indicante la data e l'ora del rilevamento
 \item informazioni relative allo stato del dispositivo, 
       p.es. lo stato della batteria
@@ -514,18 +514,18 @@ Contestualmente ad ogni \emph{batch}, quale meccanismo di conferma, il gateway i
 %
 
 %
-Compito del \emph{file\_poller} di un impianto \`e l'effettuazione, ad intervalli di tempo
-determinati, delle seguenti operazioni:
+Il Compito del \texttt{file\_poller} di un impianto \`e l'effettua, ad intervalli di tempo
+determinati, le seguenti operazioni:
 %
 \begin{enumerate}
 \item controlla se il gateway ha trasferito nuovi file; se s\`i,
-\item decodifica il digest e leggi l'elenco dei file inviati
+\item decodifica il digest e legge l'elenco dei file inviati
 \item decodifica il contenuto dei file
 \item \emph{passa} le informazioni decodificate al processo \texttt{filter} dell'impianto
 \item sposta i file decodificati in un archivio
 \item compila dei report riguardo
       \begin{itemize}
-      \item eventuali dati non arrivati
+      \item eventuali dati non ricevuti
       \item eventuali dati \emph{malformati}
       \end{itemize}
 \end{enumerate}
@@ -630,13 +630,13 @@ eventuali \emph{fault} di uno qualsiasi dei componenti di campo del sistema di m
 %
 
 %
-\subsection{La decodifica: \emph{ftp\_protocol}}
+\subsection{La decodifica: \texttt{ftp\_protocol}}
 %
 I file contenenti i dati di monitoraggio inviati dal gateway non hanno tutti lo stesso formato.
 %
-Esso varia, in generale, a seconda del tipo di dispositivo di campo. Per questo motivo, 
+Quest'ultimo varia, in generale, a seconda del tipo di dispositivo di campo. Per questo motivo, 
 l'operazione di decodifica dei file \`e delegata a un modulo, \texttt{ftp\_protocol}, 
-il quale \`e in grado di riconoscere il formato di un file e, quindi, di decodificarlo 
+il quale \`e in grado di riconoscere il formato di un file e di decodificarlo 
 correttamente.
 %
 
@@ -663,7 +663,7 @@ decode_gateway_sample (TemixID, Year, DataBlock, N, Accumulator) ->
 %
 
 %
-\subsection{Il filter}
+\subsection{Il \texttt{filter}}
 %% implementa gen_server
 Il processo \texttt{filter} si occupa del \emph{filtraggio} dei dati di monitoraggio, i.e.
 \begin{itemize}
@@ -711,7 +711,7 @@ database, mediante l'invocazione della funzione \texttt{data\_storage:write/4}.
 %
 \subsubsection{Filtraggio dati di campo}
 %
-Come gi\`a detto, l'attivit\`a di filtraggio dei dati di campo \`e viene effettuata a seguito 
+Come gi\`a detto, l'attivit\`a di filtraggio dei dati di campo viene effettuata a seguito 
 di una invocazione della funzione di interfaccia \texttt{put\_variables}. Tale chiamata viene
 \emph{gestita} dal codice riportato nel listato \ref{code:data-filtering}.
 %
@@ -731,7 +731,7 @@ handle_call({put_variables, DateTime,
 %
 Come esempio di filtraggio dati, il listato \ref{code:scale-vars} riporta un frammento della 
 definizione della funzione \texttt{scale\_vars/4}. In particolare, si tratta della porzione di 
-definizione che si occupa di \emph{scalare} i valori delle grandezze monitorate 
+codice che si occupa di \emph{scalare} i valori delle grandezze monitorate 
 dai Power/Inverter Transponder.
 %
 Tali conversioni di scala sono necessarie al fine di rendere i dati di campo \emph{consistenti} 
@@ -813,7 +813,7 @@ indicare \emph{come} calcolarli.
 %
 Per ciascun valore aggregato \`e stata quindi definita una funzione.
 %
-Il listato \ref{code:aggregate-total-active-power}, ad esempio, riporta il codice 
+Il listato \ref{code:aggregate-total-active-power}, riporta il codice 
 utilizzato per il calcolo della potenza attiva totale di un power transponder: 
 si parte da un istante temporale corrispondente a un campionamento delle variabili di 
 campo, \texttt{Timestamp}, e si cercano i valori di potenza attiva rilevati in prossimit\`a
@@ -847,7 +847,7 @@ RESTful}, i quali sono stati implementati utilizzando l'approccio descritto da S
 Vinoski in \cite{vinoski}: tale approccio consiste nell'inserire la definizione di una
 funione \texttt{out/1} all'interno di una pagina con estensione .yaws.
 %
-Il web server Yaws, su richiesta, esegue la funzione e restituisce una pagina il cui contenuto
+Il web server \emph{yaws}, su richiesta, esegue tale funzione e restituisce una pagina il cui contenuto
 \`e determinato dal risultato restituito.
 %
 

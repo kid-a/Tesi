@@ -1,8 +1,8 @@
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Architettura del sistema}
 %
-Il sistema di monitoraggio presentato in questa tesi \`e stato progettato 
-quale possibile soluzione per una azienda installatrice di impianti fotovoltaici 
+Il sistema di monitoraggio progettato, implementato e presentato in questa tesi \`e 
+stato pensato quale possibile soluzione per una azienda installatrice di impianti fotovoltaici 
 su vasta scala.
 %
 
@@ -23,16 +23,16 @@ di monitoraggio? Le motivazioni possibili sono almeno due:
       si occupa anche della manuntenzione di quest'ultimo; un sistema di 
       monitoraggio permetterebbe di tenere sotto costante osservazione 
       lo stato degli impianti installati, a livello di componente; ci\`o
-      permetterebbe una previsione e una identificazione da remoto, di 
+      permetterebbe una previsione e una identificazione da \emph{remoto}, di 
       eventuali \emph{fault}, andando ad abbattere i costi di manutenzione
       degli impianti
 \end{itemize}
 %
 
 %
-Nel capitolo precendete sono state presentate alcune delle soluzioni di 
-monitoraggio proposte in letteratura. Tuttavia, nessuno dei sistemi analizzati 
-\`e stato progettato per un impiego su vasta scala da parte di una impresa, 
+Nel capitolo precedente sono state presentate alcune delle soluzioni di 
+monitoraggio presenti in letteratura. Tuttavia, nessuno dei sistemi analizzati 
+\`e stato progettato specificatamente per un impiego su vasta scala da parte di una impresa, 
 piuttosto si tratta di sistemi \emph{prototipo}, pensati pi\`u per un uso 
 accademico che per la produzione in serie.
 %
@@ -58,7 +58,7 @@ ha, quindi, visto l'individuazione della seguente lista di \emph{desiderata}:
       dell'investimento da lui effettuato
 %
 \item \emph{semplicit\`a di installazione}, i.e. il sistema dovrebbe richiedere una quantit\`a
-      di lavoro minimale per il suo setup; tale obiettivo pu\`o essere raggiunto, ad esempio,  
+      di lavoro minimale per il suo \emph{setup}; tale obiettivo pu\`o essere raggiunto, ad esempio,  
       progettando un sistema che non richieda l'installazione di troppi cavi per 
       l'interfacciamento dei componenti, oppure, ancora, utilizzando dei dispositivi 
       \emph{autoconfiguranti}
@@ -99,8 +99,8 @@ una rappresentazione visuale e interattiva dei dati prodotti dal sistema.
 %
 Cominciamo l'analisi del sistema dalla infrastruttura dei sensori di campo.
 %
-In particolare, in questo capitolo, vedremo quali grandezze si \`e scelto di misurare 
-e quali sono state le scelte tecnologiche per la realizzazione della infrastruttura.
+In particolare, in questo capitolo, vedremo quali grandezze si \`e scelto di monitorare
+e quali sono state le scelte tecnologiche per la realizzazione della infrastruttura di campo.
 %
 
 %
@@ -156,7 +156,7 @@ quali, invece, si \`e deciso di stimare:
 \item$PR_O, (KW)$, Potenza reattiva.
 \item$V_O, (V)$, Tensione.
 \item$I_O, (A)$, Corrente.
-\item$PF_O, (adimensionale)$, Sfsamento (power factor o $cos \phi$).
+\item$PF_O, (adimensionale)$, Sfasamento (power factor o $cos \phi$).
 %%
 \end{itemize}
 %%
@@ -207,7 +207,7 @@ quali, invece, si \`e deciso di stimare:
 %
 Come vedremo in seguito, tale schema \`e assolutamente \emph{generico}. 
 %
-La modularit\`a che caratterizza il sistema implementato permette, infatti, 
+La modularit\`a che caratterizza il sistema di monitoraggio implementato permette, infatti, 
 di scegliere tra due possibili \emph{profili di monitoraggio}: uno \emph{basic}, 
 pi\`u economico, che si limita alla sola misurazione della potenza scambiata con 
 la rete al fine di monitorare la produzione energetica dell'impianto (tale soluzione 
