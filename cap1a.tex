@@ -21,7 +21,7 @@ fotovoltaico, al fine di determinare, nel tempo:
 
 %
 Una pi\`u articolata definizione delle finalit\`a di un sistema di monitoraggio
-\`e presentata in \cite{kolodenny08}. L'approccio consiste nella 
+\`e presentata in \cite{kolodenny08}. L'approccio utilizzato consiste nella 
 individuazione di tre \emph{classi} di utenti a seconda del loro ruolo, i.e.
 a seconda del tipo di informazioni, relative all'impianto monitorato,
 cui essi sono interessati:
@@ -50,6 +50,9 @@ Alla base di ogni sistema di monitoraggio vi \`e un \emph{outdoor data acquisiti
 e da una infrastruttura di comunicazione che consente di rilevare il valore di 
 determinate \emph{variabili di campo}. 
 %% la produzione e` un processo continuo
+%
+
+%
 Intuitivamente, la scelta delle variabili di campo da monitorare dipende fortemente dalla 
 classe di utenti che costituiranno gli \emph{end-user} del sistema di monitoraggio.
 %
@@ -66,17 +69,17 @@ di performance.
 %
 In linea teorica, un calo di potenza potrebbe essere dovuto sia a un malfunzionamento 
 di un componente, sia a un momentaneo annuvolamento. Per cui, informazioni utili per 
-l'identificazione delle cause del problema sono anche le correnti delle singole stringhe e le 
-condizioni metereologiche del sito ove l'impianto \`e installato.
+l'identificazione delle cause del momentaneo degrado prestazionale diventano anche le correnti 
+delle singole stringhe e le condizioni metereologiche del sito ove l'impianto \`e installato.
 %
 Come fatto notare in \cite{kolodenny08}, \emph{pi\`u l'insieme delle informazioni rilevanti 
-\`e completo, pi\`u rapida e affidabile sar\`a la procedura di diagnostica di ogni 
-malfunzionamento del sistema}.
-%% parlare del predictive monitoring?
+\`e completo, pi\`u rapida e affidabile sar\`a la procedura di diagnostica degli eventuali 
+malfunzionamenti del sistema}.
+%% predictive monitoring
 %
 
 %
-In generale, un insieme di \emph{grandezze rilevanti} adatto a qualunque esigenza 
+Un insieme di \emph{grandezze rilevanti} generale, adatto a qualunque esigenza 
 di monitoraggio, \`e ricavabile da una analisi delle soluzioni proposte in letteratura
 \cite{xiaoli11}, \cite{dirks06}, \cite{kolodenny06}, \cite{aristizabal06}: %%\cite{benghanem98}:
 %
@@ -106,16 +109,18 @@ letteratura adottano le soluzioni pi\`u disparate:
       cablaggi aggiuntivi; i sensori vengono interrogati periodicamente da un PLC
 \item in \cite{xiaoli11} viene proposto un approccio basato sull'implementazione di una 
       \emph{wireless sensor network} (WSN): ogni sensore \`e dotato di un transponder 
-      ZigBee\cite{zigbee} che gli permette di interfacciarsi con una \emph{base station},
+      ZigBee\cite{zigbee}, che gli permette di interfacciarsi con una \emph{base station},
       il cui compito \`e quello di raccogliere e integrare i dati di tutti i sensori;
       come la soluzione precedente, anche in questo caso non vi \`e necessit\`a di 
       cablaggi aggiuntivi
 \item in \cite{guozhen09} vengono affrontate alcune problematiche legate 
-      all'implementazione di sistemi SCADA per il monitoraggio di impianti fotovoltaici
+      all'utilizzo di sistemi SCADA basati su bus di campo
 \end{itemize}
 %
 La scelta del sistema di acquisizione da utilizzare \`e anch'essa frutto delle esigenze 
 di monitoraggio. 
+%
+
 %
 Sistemi basati su bus industriali gestiti da PLC o SCADA sono in grado di 
 offrire delle garanzie di consegna dei dati di tipo \emph{real time}; 
@@ -129,7 +134,7 @@ non sono di immediata installazione e configurazione.
 
 %
 Una soluzione basata su WSN, d'altra parte, \`e pi\`u economica e semplice da 
-installare e configurare, a fronte di una ridottissima capacit\`a a far fronte a 
+installare e configurare, a fronte di una ridotta capacit\`a a far fronte a 
 esigenze di monitoraggio tempo critiche.
 %
 \section{Presentazione dei dati}
@@ -166,9 +171,9 @@ Altre possibili rappresentazioni verranno trattate nel capitolo\ref{sec:datapres
 %
 
 %
-Per quanto riguarda le piattaforme utilizzate, \`e interessante notare come la
+Per quanto riguarda le piattaforme utilizzate per la presentazione dei dati, la
 maggior parte delle soluzioni gi\`a citate \cite{kolodenny06}, \cite{xiaoli11}, 
-\cite{dirks06} pubblichi e rappresenti i dati mediante una \emph{web application}.
+\cite{dirks06} pubblica e rappresenta i dati mediante una \emph{web application}.
 
 
 %% quale tecnologia utilizzare?
