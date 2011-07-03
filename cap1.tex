@@ -1,16 +1,16 @@
 \clearpage{\pagestyle{empty}\cleardoublepage}
 \chapter{Introduzione al fotovoltaico}
 %
-Per \emph{impianto fovoltaico} si intende un qualunque 
-impianto di produzione di energia elettrica che sfrutti, ai fini 
+Per \emph{impianto fotovoltaico} si intende un qualunque 
+sistema di produzione di energia elettrica che sfrutti, ai fini 
 di produzione della stessa, l'\emph{effetto fotovoltaico}.
 %
 Ne esistono due grandi tipologie: impianti \emph{a isola} (o \emph{stand alone}), 
-e impianti \emph{grid connected}, ovvero connessi alla rete nazionale in 
+e impianti \emph{grid connected}, ovvero connessi ad una rete di distribuzione in 
 corrente alternata.
 %
-Oggetto di questa tesi saranno solo questi ultimi, in quanto sono gli unici
-di cui abbia senso monitorare e quantificare la produzione energetica; gli impianti 
+Nel prosieguo della trattazione, faremo riferimento solo a questi ultimi, 
+in quanto sono gli unici di cui abbia senso monitorare e quantificare la produzione energetica; gli impianti 
 a isola, infatti, non sono generalmente utilizzati per la produzione di grandi
 quantit\`a d'energia, piuttosto trovano applicazione laddove \`e necessario
 rendere un sistema elettricamente \emph{autosufficiente}, p.es. per la 
@@ -18,8 +18,9 @@ ricarica di dispositivi alimentati a batteria.
 %
 
 %
-Iniziamo la panoramica sugli impianti fotovoltaici partendo dal fenomeno
-che sta alla base del loro funzionamento: l'effetto fotovoltaico.
+Prima di iniziare la nostra panoramica sugli impianti \emph{grid-connected}, introduciamo
+brevemente il fenomeno fisico che \`e alla base del loro funzionamento:
+l'effetto fotovoltaico.
 %
 
 %
@@ -28,9 +29,10 @@ L'\emph{effetto fotovoltaico} consiste nel passaggio di elettroni
 dalla \emph{banda di valenza} alla \emph{banda di conduzione} di 
 un materiale, a causa dell'assorbimento di \emph{fotoni}. 
 %
-Tale fenomeno viene sfruttato dai \emph{moduli (o celle) fotovoltaici}, 
-come mostrato in figura \ref{effetto-fv} allo scopo di trasformare 
-l'energia insita nella radiazione luminosa in energia elettrica.
+Tale fenomeno, osservato per la prima volta da Alexandre-Edmond Becquerel nel 1839,
+viene sfruttato nelle \emph{celle fotovoltaiche}, come mostrato in figura \ref{effetto-fv},
+al fine di produrre una corrente continua, a partire dall'energia insita 
+nella radiazione luminosa.
 %
 \begin{figure}[!h]
 \centering
@@ -43,28 +45,30 @@ l'energia insita nella radiazione luminosa in energia elettrica.
 %
 \section{Architettura degli impianti grid-connected}
 Gli impianti fotovoltaici grid connected, detti anche \emph{campi fotovoltaici}, 
-sono costituiti da un insieme di dispositivi \emph{in cascata}, come mostrato in 
+sono costituiti da un insieme di dispositivi disposti \emph{in cascata}, come mostrato in 
 figura \ref{impiantogridconnect}: \emph{a monte} di tutto si trovano i \emph{moduli 
 fotovoltaici}, ovvero i dispositivi che, sfruttando l'effetto fotovoltaico, 
-producono energia elettrica. \emph{A valle} di questi, troviamo gli \emph{inverter}, 
-macchinari il cui compito \`e quello di trasformare l'energia prodotta dai moduli 
-in una forma tale che possa essere ceduta alla rete di distribuzione. Infine, tra 
-gli inverter e la rete, il GSE provvede all'installazione di un \emph{contatore 
-bidirezionale}, il cui scopo \`e quello di quantificare la produzione dell'impianto.
+generano una corrente elettrica continua. \emph{A valle} di questi, troviamo gli \emph{inverter}, 
+macchinari il cui compito \`e quello di trasformare la corrente continua prodotta dai moduli
+in corrente alternata, direttamente cedibile alla rete di distribuzione.
+%
+Infine, tra gli inverter e la rete, il gestore della rete stessa provvede all'installazione 
+di un \emph{contatore bidirezionale}, il cui scopo \`e quello di quantificare la produzione 
+energetica dell'impianto.
 %
 
 %
-Comunemente, gli impianti di questo tipo sono caratterizzati principalmente dalla 
-loro \emph{potenza di picco}, i.e. la massima potenza che essi sono in grado di 
-erogare. Sulla base di tale valore, \`e possibile effettuare una classificazione
-di questi sistemi, secondo quanto riportato in \cite{castaner02}:
+Il principale fattore caratterizzante degli impianti \emph{grid-connected} \`e la loro
+\emph{potenza di picco}, i.e. la massima potenza che essi sono in grado di 
+erogare. Sulla base di tale valore, secondo \cite{castaner02}, \`e possibile effettuare 
+la seguente classificazione:
 %
 \begin{itemize}
 \item impianti di \emph{piccole dimensioni}: 1 $\sim$  10 kWp
 \item impianti di \emph{medie dimensioni}: 10 $\sim$ 500 kWp
 \item impianti di \emph{grandi dimensioni}: 500 $\sim$ MWp 
 \end{itemize}
-%% un impianto si caratterizza per la quantita` di energia di picco
+%
 \begin{figure}[!h]
 \centering
 \includegraphics[width=350pt]{img/impianto-grid-connect.jpg}
@@ -74,17 +78,16 @@ di questi sistemi, secondo quanto riportato in \cite{castaner02}:
 %
 
 %
-Come gi\`a anticipato, gli impianti grid-connected immettono direttamente in rete 
-l'energia prodotta. Per questo tipo di impianti, il GSE prevede uno schema di compensazione 
+Per questo tipo di impianti, il GSE prevede uno schema di compensazione 
 noto come \emph{scambio sul posto}\cite{scambioposto}, secondo cui l'energia immessa 
 in rete pu\`o essere prelevata successivamente per i propri consumi.
 %
 
 %
 \subsection{I moduli fotovoltaici}
-I moduli fotovoltaici sono gli elementi produttivi di un impianto. 
+I moduli fotovoltaici sono gli elementi costitutivi di base di un impianto. 
 Si tratta di dispositivi costituiti da \emph{celle} di materiale 
-\emph{semiconduttore}, caratterizzato quindi da un \emph{band gap} 
+\emph{semiconduttore}, caratterizzato, quindi, da un \emph{band gap} 
 di dimensioni tali per cui 
 %
 \begin{itemize}
@@ -101,17 +104,19 @@ La presenza di \emph{portatori di carica} nella banda di conduzione
 fa si che il modulo fotovoltaico, una volta connesso ad un conduttore 
 esterno, si comporti come un \emph{generatore di corrente}\cite{castaner02}.
 %
+
+%
 La ricerca di un modello matematico per i moduli fotovoltaici \`e un problema 
 ampiamente trattato in letteratura: le soluzioni proposte vanno dal modello 
-estremamente semplice\cite{bellini09}, a modelli complessi, 
+estremamente semplice\cite{bellini09}, a modelli pi\`u complessi, 
 che tengono conto di fattori quali variazioni di irraggiamento e 
-ombreggiature\cite{patel08}.
+direzione e intensit\`a del vento\cite{patel08}.
 
 %
 \begin{figure}[!h]
 \centering
 \includegraphics[width=350pt]{img/modulo-fotovoltaico.jpg}
-\caption{Modulo fotovoltaico in silicio \emph{monocristallino}}
+\caption{Cella fotovoltaica in silicio \emph{monocristallino}}
 \end{figure}
 %
 Allo stato attuale, esistono diverse tecnologie di realizzazione di 
@@ -173,7 +178,7 @@ invece mostra cosa accade al variare della temperatura superficiale del modulo.
 Per \emph{stringa fotovoltaica} si intende un insieme di moduli connessi in \emph{serie}, 
 come mostrato in figura \ref{stringa}.
 %
-La connessione in serie dei moduli \`e resa possibile da apposite \emph{junction box}, 
+La connessione in serie dei moduli \`e effettuata mediante apposite \emph{junction box}, 
 generalmente collocate sul retro dei moduli.
 %
 
@@ -194,12 +199,12 @@ generalmente collocate sul retro dei moduli.
 %
 
 %
-\`E importante evidenziare come connettere i moduli in serie condizioni le 
+\`E importante evidenziare come il connettere i moduli in serie condizioni le 
 prestazioni dell'intera stringa: la legge di Ohm, infatti, impone che ogni 
 modulo connesso in serie venga attraversato dalla stessa quantit\`a di corrente;
 per cui, un degrado, anche temporaneo, delle prestazioni o, peggio, il 
-malfunzionamento di uno dei moduli, provoca un peggioramento di produzione 
-per tutti i moduli della stringa.
+malfunzionamento di uno dei moduli, provoca un peggioramento delle \emph{performance}
+di tutti i moduli della stringa.
 %
 Tale fenomeno, noto come \emph{mismatch di corrente}, pu\`o manifestarsi,
 ad esempio, nel caso in cui uno o pi\`u moduli siano, anche solo parzialmente, 
@@ -228,10 +233,10 @@ alternative alla serie\cite{roman06},\cite{sung09}.
 % dire che piu` stringhe possono essere collegate in parallelo
 %
 \subsection{Gli inverter}
-La corrente continua prodotta dalle stringhe non pu\`o essere direttamente
-immessa in rete. Si rendono necessari dei dispositivi, detti \emph{inverter}, 
-in grado di trasformare la corrente continua in corrente alternata, alla 
-stessa frequenza di quella della rete di distribuzione.
+La corrente continua prodotta dalle stringhe non pu\`o essere immessa direttamente 
+nella rete di distribuzione in AC. Si rendono necessari dei dispositivi, detti \emph{inverter}, 
+il cui compito principale \`e quello di trasformare tale corrente continua in corrente alternata, 
+alla stessa frequenza di quella della rete di distribuzione.
 %
 
 %
@@ -239,8 +244,8 @@ Nel contesto di un campo fotovoltaico, gli inverter sono quindi collocati a
 giunzione delle stringhe con la rete di distribuzione esterna. 
 %
 Come intuibile, si tratta dei componenti pi\`u complessi e critici degli 
-impianti fotovoltaici: una loro avaria pu\`o compromettere il processo di 
-distribuzione dell'energia prodotta dai moduli.
+impianti fotovoltaici: una loro avaria pu\`o compromettere del tutto 
+l'immissione in rete dell'energia prodotta dai moduli.
 %
 
 %
@@ -257,18 +262,17 @@ Tra i dati di targa di un inverter, particolare importanza riveste la sua
 (ceduta dall'inverter alla rete di distribuzione) e l'energia in ingresso 
 (prodotta dalle stringhe).
 %
-Il valore di efficienza di un inveter non \`e determinato solo dalla 
-non idealit\`a del processo di trasfomazione: parte dell'energia in ingresso, 
-infatti, viene utilizzata dallo stesso inverter come alimentazione.
+Tale valore non \`e mai pari al 100\%; ci\`o non dipende solo dalla 
+non idealit\`a del processo di trasformazione: parte dell'energia in ingresso, 
+infatti, viene utilizzata dallo stesso inverter quale fonte di alimentazione.
 %
-Gli inverter oggi presenti in commercio sono caratterizzati da valori tipici di
-efficienza superiori al 95\%. Tuttavia, \`e da tenere in conto che l'efficienza 
-di un inverter, a causa dell'effetto combinato di tempo e usura, tende a 
-subire delle degradazioni.
+Gli inverter oggi presenti in commercio sono, comunque, caratterizzati da valori tipici di
+efficienza superiori al 95\%. Tuttavia, \`e da tenere in conto che tali valori, 
+a causa dell'effetto combinato di tempo e usura, tendono a subire delle degradazioni.
 %
 
 %
-Gli inverter progettati specificatamente per il fovoltaico presentano una gamma 
+Gli inverter progettati specificatamente per il fotovoltaico presentano una gamma 
 di funzionalit\`a che va oltre la sola trasformazione di corrente continua 
 in alternata. Essi, infatti, sono spesso dotati di particolari sistemi di 
 controllo, come il \emph{maximum power point tracker} (MPPT) che regolano la tensione 
