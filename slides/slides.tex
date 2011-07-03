@@ -1,0 +1,177 @@
+\documentclass{beamer}
+
+%\usepackage{graphicx}
+%\usepackage{tikz}
+%\usepackage[absolute,overlay]{textpos}
+%\usepackage{listings}
+%\usepackage{textpos}
+\usepackage{graphicx}
+
+
+%\includeonlyframes{1,2,3}
+
+
+\usetheme{Antibes}
+% Orange
+\usecolortheme[RGB={32,115,53}]{structure}
+
+\usebackgroundtemplate{
+    % UniCT Logo
+    \includegraphics[width=370pt]{img/unict.jpg}
+}
+
+\newtheorem{samplecode}{Sample Code}
+
+%\setbeamercovered{transparent}
+\setbeamertemplate{footline}[frame number]{}
+\setbeamertemplate{blocks}[rounded][bg=red]
+
+\newcommand{\tildett}{\raise.17ex\hbox{$\scriptstyle\mathtt{\sim}$}}
+% Spaces
+\newcommand{\N}{\vskip 0.3 cm}
+\newcommand{\n}{\vskip 0.2 cm}
+\newcommand{\TAB}{\hskip 1.8 cm}
+\newcommand{\tab}{\hskip 0.6 cm}
+
+% Colors
+\newcommand{\red}[1]{\textcolor[rgb]{.8,0,0}{#1}}
+\newcommand{\blue}[1]{\textcolor[rgb]{0,0,.7}{#1}}
+\newcommand{\navy}[1]{\textcolor[rgb]{0,0,.5}{#1}}
+\newcommand{\purple}[1]{\textcolor[rgb]{.7,0,.8}{#1}}
+\newcommand{\green}[1]{\textcolor[rgb]{0,.6,.1}{#1}}
+
+
+\title[Un sistema per il monitoraggio di impianti fotovoltaici]{
+  Un sistema per il monitoraggio di \\ impianti fotovoltaici
+ }\subtitle[]{Progetto e implementazione}
+\author{Loris Fichera \n
+Relatore: Prof. Corrado Santoro}
+\institute[Universit\`a di Catania]{
+	Universit\`a degli Studi di Catania\\
+        Corso di Laurea Specialistica in Ingegneria Informatica\\
+}
+\date{20 Luglio 2011}
+
+
+\begin{document}
+
+% Title Page
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+%
+
+%------------------------------
+%% \begin{frame}[shrinks,label=o]{Outline}
+%% %  \tableofcontents[pausesections]
+%% %     \tableofcontents
+%%     \begin{columns}
+%%      \column{2.0in}
+%% %       \tableofcontents[sections={1}]
+%% %      \vspace{10mm}
+%%        \tableofcontents[sections={2}]
+%%       \vspace{10mm}
+%%        \tableofcontents[sections={3}]
+%%        \column{2.0in}
+%%        \tableofcontents[sections={4}] 
+%%        \vspace{10mm}
+%%       \tableofcontents[sections={5}] 
+%% %      \vspace{10mm}
+%% %       \tableofcontents[sections={5}]
+%%       \end{columns}
+%% \end{frame}
+%------------------------------
+
+
+
+
+
+%%\section*{Introduction}
+
+%\subsection{}
+%
+%\begin{frame}{Problem Statement}  
+%  \begin{itemize}
+%    \item Our work aims at \ldots
+%    \item More\dots
+%  \end{itemize}
+%  \vfill
+%  A whitespace gap\\
+%  \begin{tiny}
+%    Smaller Font
+%  \end{tiny}
+%\end{frame}
+%%
+
+
+%----------------------------- Core concepts of PROFETA
+%% \include{profeta}
+%% %----------------------------- PLY features
+%% \include{ply}
+%% %----------------------------- Propylene description
+%% \include{propylene}
+%----------------------------- Case study (not useful)
+%\include{casestudy}
+
+
+%% \section{Conclusions}
+%% %
+%% \begin{frame}{Conclusions}
+%% % 3 final remarks
+%%   \begin{itemize}
+%%     \item \navy{Propylene} is a Python classes generator that extracts
+%%     \emph{Profeta Attitudes} from \emph{Profeta Plans}
+%% \N
+%%     \item \navy{Propylene} uses a pure-Python implementation of \emph{lex}
+%%     and \emph{yacc}, \red{PLY}, as parsing tool
+%% \N
+%%     \item \navy{Propylene} provides a \textbf{graphical representation} 
+%%     of the parse tree that is used to generate the code
+%%   \end{itemize}
+%% \end{frame}
+%
+
+%
+%% \begin{frame}{References}
+%%   \begin{thebibliography}{10}
+
+%%     \beamertemplatearticlebibitems
+
+%% %    \bibitem{bdi}
+%% %      Rao, A., Georgeff, M.
+%% %      \newblock BDI agents: From theory to practice 
+%% %      \newblock {\em Proceedings of the first international 
+%% %      conference on multi-agent systems}, 312--319, 1995.
+
+%%     \bibitem{AgentSpeak}
+%%       A.S.~Rao
+%%       \newblock AgentSpeak(L): BDI agents speak out in a logical 
+%%       computable language
+%%       \newblock {\em Lecture Notes in Artificial Intelligence}, 
+%%       1038:42--55, 1996.
+%% \n    
+%%     \beamertemplatearrowbibitems
+%%     \bibitem{ply}
+%%       PLY
+%%       \newblock \url{http://www.dabeaz.com/ply/}
+%%       \newblock {\em Python Lex-Yacc}
+%% \n 
+%%     \bibitem{nx}
+%%       NetworkX
+%%       \newblock \url{http://networkx.lanl.gov/}
+%%       \newblock {\em Visual Generator}
+ 
+%%     \end{thebibliography}
+
+
+
+
+%% \end{frame}
+%
+
+
+
+
+%
+%
+\end{document}
