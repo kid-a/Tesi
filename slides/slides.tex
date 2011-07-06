@@ -300,11 +300,10 @@ Si occupa di
 \begin{exampleblock}{Code snippet}
 \begin{semiverbatim}
 data_storage:\red{add_new_plant_by_structure} (
-      _UniqueID = "MyPlant", 
-      _Location = "Nowhere",
+      \green{_UniqueID} = "MyPlant", 
+      \green{_Location} = "Nowhere",
       ...
-      %% just one inverter
-      _Inverters = [{{"YURAKU", "I-3000"}, 
+      \green{_Inverters} = [{{"YURAKU", "I-3000"}, 
                     "Inverter-00", "0000-0000-0000", 
                     [%% strings here...
                      ]} ]).
@@ -319,121 +318,183 @@ data_storage:\red{add_new_plant_by_structure} (
 %
 
 %
-%% \begin{frame}{L'applicazione \texttt{datamanager}}
-%% \end{frame}
+\begin{frame}{L'applicazione \texttt{datamanager}}
+%
+Gestisce i flussi informativi generati da ogni impianto
+%
+\begin{figure}[!h]
+  \begin{center}
+    \fbox{\includegraphics[width=150pt]{img/datamanager.png}}
+  \end{center}
+\end{figure}
+%
+\begin{itemize}
+\item un \emph{process pool} per ogni impianto
+\item due \red{worker} per \emph{pool}
+  \begin{itemize}
+  \item un \texttt{filter}
+  \item un processo \red{endpoint} (\texttt{file\_poller}, \texttt{sms\_manager})
+  \end{itemize}
+\item politiche di \red{riavvio} dei supervisor
+\end{itemize}
+%
+\end{frame}
 %
 
 %
-%% \section{Testing}
-%% \begin{frame}{Test effettuati}
-%% %% il sistema e` stato installato in configurazione minima...
-%% \end{frame}
-%% %
-
-%% %
-%% \section{Sviluppi futuri}
-%% \begin{frame}{Sviluppi futuri}
-
-
-%% \end{frame}
-
-
-
-
-
-
-
-
-
-
-
-
-%%\section*{Introduction}
-
-%\subsection{}
-%
-%\begin{frame}{Problem Statement}  
-%  \begin{itemize}
-%    \item Our work aims at \ldots
-%    \item More\dots
-%  \end{itemize}
-%  \vfill
-%  A whitespace gap\\
-%  \begin{tiny}
-%    Smaller Font
-%  \end{tiny}
-%\end{frame}
-%%
-
-
-%----------------------------- Core concepts of PROFETA
-%% \include{profeta}
-%% %----------------------------- PLY features
-%% \include{ply}
-%% %----------------------------- Propylene description
-%% \include{propylene}
-%----------------------------- Case study (not useful)
-%\include{casestudy}
-
-
-%% \section{Conclusions}
-%% %
-%% \begin{frame}{Conclusions}
-%% % 3 final remarks
-%%   \begin{itemize}
-%%     \item \navy{Propylene} is a Python classes generator that extracts
-%%     \emph{Profeta Attitudes} from \emph{Profeta Plans}
-%% \N
-%%     \item \navy{Propylene} uses a pure-Python implementation of \emph{lex}
-%%     and \emph{yacc}, \red{PLY}, as parsing tool
-%% \N
-%%     \item \navy{Propylene} provides a \textbf{graphical representation} 
-%%     of the parse tree that is used to generate the code
-%%   \end{itemize}
-%% \end{frame}
+\begin{frame}[fragile]{Il \texttt{file\_poller}}
+  %
+  \begin{itemize}
+  \item decodifica i dati ricevuti via \red{FTP}
+  \item genera \red{report} riguardo
+    \begin{itemize}
+    \item dati \red{corrotti}
+    \item dati \red{mancanti}
+    \end{itemize}
+  \item invia i dati ricevuti al \texttt{filter}
+  \end{itemize}
+  %
+\begin{exampleblock}{Decodifica dei dati}
+\begin{semiverbatim}
+\begin{small}
+\green{try}
+ \{ok, \blue{FileContent}\} = 
+   \red{file:read_file} (lists:concat ([Path, File])),
+   \red{ftp_protocol:decode} (\blue{FileContent})
+		
+\green{catch} error : \{\blue{Reason}, D\} ->
+    ...
+  nil
+\green{end},
+\end{small}
+\end{semiverbatim}
+\end{exampleblock}  
+\end{frame}
 %
 
 %
-%% \begin{frame}{References}
-%%   \begin{thebibliography}{10}
-
-%%     \beamertemplatearticlebibitems
-
-%% %    \bibitem{bdi}
-%% %      Rao, A., Georgeff, M.
-%% %      \newblock BDI agents: From theory to practice 
-%% %      \newblock {\em Proceedings of the first international 
-%% %      conference on multi-agent systems}, 312--319, 1995.
-
-%%     \bibitem{AgentSpeak}
-%%       A.S.~Rao
-%%       \newblock AgentSpeak(L): BDI agents speak out in a logical 
-%%       computable language
-%%       \newblock {\em Lecture Notes in Artificial Intelligence}, 
-%%       1038:42--55, 1996.
-%% \n    
-%%     \beamertemplatearrowbibitems
-%%     \bibitem{ply}
-%%       PLY
-%%       \newblock \url{http://www.dabeaz.com/ply/}
-%%       \newblock {\em Python Lex-Yacc}
-%% \n 
-%%     \bibitem{nx}
-%%       NetworkX
-%%       \newblock \url{http://networkx.lanl.gov/}
-%%       \newblock {\em Visual Generator}
- 
-%%     \end{thebibliography}
-
-
-
-
-%% \end{frame}
+\begin{frame}{Il \texttt{filter}/1}
+%
+Due attivit\`a concorrenti:
+\begin{itemize}
+\item \red{filtraggio} dei dati ricevuti (scaling, ecc.)
+\item \red{stima} di altri valori
+\end{itemize}  
+%
+\begin{figure}[!h]
+  \begin{center}
+    \fbox{\includegraphics[width=190pt]{img/filter.png}}
+  \end{center}
+\end{figure}
+\end{frame}
 %
 
+%
+\begin{frame}[fragile]{Il \texttt{filter}/2}
+  \begin{exampleblock}{Calcolo della potenza totale per Power Transponder}
+    \begin{semiverbatim}
+      \begin{small}
+\{ok, \{_, \blue{Vars}\}\} = 
+  \red{data_storage:get_trend_by_device} (\blue{DeviceID}, F, T, 
+                                   ["active-power-l1",
+                                    "active-power-l2",
+                                    "active-power-l3"]),
+	      
+\blue{PropList} = \red{measure_data_to_proplist} (\blue{Vars}),
+\blue{P1} = \red{proplists:get_value} ("active-power-l1", \blue{PropList}),
+\blue{P2} = \red{proplists:get_value} ("active-power-l2", \blue{PropList}),
+\blue{P3} = \red{proplists:get_value} ("active-power-l3", \blue{PropList}),
+	      
+\blue{TotalActivePower} = \blue{P1} + \blue{P2} + \blue{P3}, 
+\end{small}
+    \end{semiverbatim}
+  \end{exampleblock}
+\end{frame}
 
 
+\begin{frame}[fragile]{Web Services}
+  \begin{itemize}
+  \item basati su \red{Yaws}
+  \item \red{RESTful}
+  \end{itemize}
+%
+  \begin{exampleblock}{Servizio \texttt{get\_plants}}
+    \begin{semiverbatim}
+      \begin{small}
+<erl>
+out(A) ->
+ \{ok, \blue{PlantList}\} = \red{data_storage:get_plants}(),
+  Reply =
+    \red{xml_translator:make_plant_list_response} (\blue{PlantList}),
+  {html, \blue{Reply}}.
+</erl>
+
+<\purple{plant_list_response}>
+  <\purple{plant} \navy{id}="1" \navy{unique_id}="plant-1" \navy{customer_id}="0" ... />
+</\purple{plant_list_response}>
+      \end{small}
+    \end{semiverbatim}
+  \end{exampleblock}
+\end{frame}
+
+\section{Testing}
+\begin{frame}{Potenza prodotta vs. Corrente immessa in rete}
+%% il sistema e` stato installato in configurazione minima...
+  \begin{columns}
+    \column{2.5in}
+    \begin{figure}[!h]
+      \begin{center}
+        \fbox{\includegraphics[width=145pt]{img/current-power-transponder.png}}
+      \end{center}
+    \end{figure}
+    %   
+    \begin{figure}[!h]
+      \begin{center}
+        \fbox{\includegraphics[width=145pt]{img/potenza-giornaliera.png}}
+      \end{center}
+    \end{figure}
+    \column{1.5in}
+    blah \\
+    blah
+  \end{columns}
+\end{frame}
+%
 
 %
+\begin{frame}{Potenza prodotta vs. Radiazione}
+  \begin{columns}
+    \column{2.5in}
+    \begin{figure}[!h]
+      \begin{center}
+        \fbox{\includegraphics[width=150pt]{img/radiazione-giornaliera.png}}
+      \end{center}
+    \end{figure}
+    %   
+    \begin{figure}[!h]
+      \begin{center}
+        \fbox{\includegraphics[width=145pt]{img/potenza-giornaliera.png}}
+      \end{center}
+    \end{figure}
+    \column{1.5in}
+    blah \\
+    blah
+    \end{columns}
+\end{frame}
+%
+
+%
+\section{Sviluppi futuri}
+%
+\begin{frame}{Sviluppi futuri}
+  \begin{itemize}
+    \item sicurezza, blah
+    \item sistema esperto per la diagnosi, blah
+  \end{itemize}
+   \begin{figure}[!h]
+      \begin{center}
+        \fbox{\includegraphics[width=200pt]{img/solar-plant.jpg}}
+      \end{center}
+    \end{figure}
+\end{frame}
 %
 \end{document}
