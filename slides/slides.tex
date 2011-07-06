@@ -6,6 +6,7 @@
 %\usepackage{listings}
 %\usepackage{textpos}
 \usepackage{graphicx}
+\usepackage{verbatim}
 
 
 %\includeonlyframes{1,2,3}
@@ -94,12 +95,12 @@ Relatore: Prof. Corrado Santoro}
     \item oltre \red{4 GW} al 31/12/2010
   \end{itemize}
   \N
-  Il problema del monitoraggio assume importanza per 
-  \begin{itemize}
+  Monitorare gli impianti fotovoltaici diventa importante per
+    \begin{itemize}
     \item i \green{soggetti responsabili}
     \item gli \green{installatori/manutentori}
   \end{itemize}
-  \N
+  \N  
   "Gran parte delle soluzioni oggi in commercio mostrano caratteri di \emph{immaturit\`a}" (C. Podewils 2010)
 \end{frame}
 %
@@ -108,7 +109,7 @@ Relatore: Prof. Corrado Santoro}
 \section{Il monitoraggio di impianti fotovoltaici}
 \subsection{Definizione del Problema}
 \begin{frame}{Obiettivi}
-Un sistema di monitoraggio effettua la \green{raccolta} e \green{l'integrazione} dei dati \red{rilevanti} di un impianto al fine di
+Un sistema di monitoraggio effettua la \green{raccolta} e \green{l'integrazione} dei  \red{dati rilevanti} di un impianto al fine di
 determinarne:
 %
 \begin{itemize}
@@ -119,12 +120,222 @@ determinarne:
 %
 \begin{figure}[!h]
   \begin{center}
-    \fbox{\includegraphics[width=170pt]{img/solar_photovoltaic.jpg}}
+    \fbox{\includegraphics[width=140pt]{img/solar_photovoltaic.jpg}}
+  \end{center}
+\end{figure}
+%
+Quali sono i \red{dati rilevanti}?
+\end{frame}
+%
+
+%
+\begin{frame}{Classi di utenti (Kolodenny 2008)}
+Kolodenny \emph{et al.}, identificano le seguenti \green{classi di utenti}:
+\N
+%
+\begin{itemize}
+\item \red{ricercatore}
+  \begin{itemize}
+  \item quanti pi\`u dati possibile
+  \item alto livello di dettaglio
+  \end{itemize}
+  %
+\item \red{proprietario}
+  \begin{itemize}
+  \item energia prodotta
+  \item ritorno economico
+  \end{itemize}
+  %
+\item \red{manutentore}
+  \begin{itemize}
+  \item comportamento di ogni componente (modulo, inverter...)
+  \item dati ambientali
+  \end{itemize}
+\end{itemize}
+%
+\end{frame}
+%
+
+%
+\section{La soluzione implementata}
+\begin{frame}{Panoramica del sistema}
+%
+\begin{figure}[!h]
+  \begin{center}
+    \fbox{\includegraphics[width=310pt]{img/architecture.png}}
+  \end{center}
+\end{figure}
+%
+\begin{itemize}
+\item infrastruttura \red{di campo}
+\item trasmissione dati via \red{gprs} (o \red{sms})
+\item \red{datacenter}
+\item accesso ai dati via \red{web services}
+\item portale web
+\end{itemize}
+%
+\end{frame}
+%
+
+%
+\subsection{L'infrastruttura di campo}
+\begin{frame}{Infrastruttura di campo}
+%
+\begin{itemize}
+  \item \red{Wireless Sensor Network} (WSN) ZigBee-based
+    \begin{itemize}
+    \item bassi costi
+    \item no cablaggi aggiuntivi
+    \item rete autoconfigurante
+    \end{itemize}
+    \N
+  \item previsti tre tipi di nodi
+    \begin{itemize}
+    \item \red{gateway}
+    \item \red{power/inverter transponder}
+    \item \red{string transponder}
+    \end{itemize}
+\end{itemize}
+%
+\end{frame}
+%
+
+%
+\begin{frame}{Il Gateway}
+\begin{figure}[!h]
+  \begin{center}
+    \fbox{\includegraphics[width=60pt]{img/gw.jpg}}
+  \end{center}
+\end{figure}
+%
+\begin{itemize}
+  \item agisce da \red{concentratore dati}
+  \item \red{modem gsm} per la trasmissione dei dati
+    \begin{itemize}
+    \item via \green{sms}
+    \item via \green{FTP} \emph{over} \green{gprs}
+    \item \red{transmission interval} configurabile
+      \end{itemize}
+  \item \red{elemento fotovoltaico} per la ricarica della batteria
+\end{itemize}
+%
+\end{frame}
+%
+
+%
+\begin{frame}{Il Power/Inverter Transponder}
+\begin{figure}[!h]
+  \begin{center}
+    \fbox{\includegraphics[width=60pt]{img/power-transponder.jpg}}
+  \end{center}
+\end{figure}
+%
+\begin{itemize}
+\item \red{analizzatore di rete} + \red{transponder ZigBee}
+\item misura delle grandezze elettriche \\ (corrente, potenza, power factor...)
+  \begin{itemize}
+  \item a monte del contatore bidirezionale
+  \item a valle di ogni inverter
+  \item \red{sampling interval} configurabile
+  \end{itemize}
+\end{itemize}
+%
+\end{frame}
+%
+
+%
+\begin{frame}{Lo String Transponder}
+\begin{figure}[!h]
+  \begin{center}
+    \fbox{\includegraphics[width=60pt]{img/string-transponder.jpg}}
+  \end{center}
+\end{figure}
+%
+\begin{itemize}
+\item \red{sensore di corrente} (a \emph{effetto Hall}) + \red{transponder ZigBee}
+\item misura della corrente di stringa
+  \begin{itemize}
+  \item \red{sampling interval} configurabile  
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+%
+
+%
+\subsection{Il Datacenter}
+%
+\begin{frame}{Il Datacenter}
+Si occupa di
+\begin{itemize}
+\item \green{gestire i flussi informativi} generati dai gateway
+\item \green{elaborare} e \green{memorizzare} i dati di campo 
+\item generare \green{report} e \green{allarmi}
+\item fornire \green{accesso ai dati}
+\end{itemize}
+%
+\N
+\begin{itemize}
+  \item \`e interamente basato su \red{Erlang/OTP}
+  \item \`e costituito da un insieme di \red{Erlang applications}
+\end{itemize}
+%
+\begin{figure}[!h]
+  \begin{center}
+    \fbox{\includegraphics[width=60pt]{img/erlang-logo.png}}
   \end{center}
 \end{figure}
 %
 \end{frame}
 %
+
+%
+\begin{frame}[fragile]{L'applicazione \texttt{database}}
+  Possiede un unico processo \green{worker}, il quale 
+  funge da wrapper per il database \red{MySQL} in cui vengono memorizzati
+  \begin{itemize}
+  \item configurazioni degli impianti
+  \item dati di monitoraggio
+  \end{itemize}
+  %
+\begin{exampleblock}{Code snippet}
+\begin{semiverbatim}
+data_storage:\red{add_new_plant_by_structure} (
+      _UniqueID = "MyPlant", 
+      _Location = "Nowhere",
+      ...
+      %% just one inverter
+      _Inverters = [{{"YURAKU", "I-3000"}, 
+                    "Inverter-00", "0000-0000-0000", 
+                    [%% strings here...
+                     ]} ]).
+\end{semiverbatim}
+\end{exampleblock}  
+\end{frame}
+%
+
+%
+%% \begin{frame}{L'applicazione \texttt{sysconf}}
+%% \end{frame}
+%
+
+%
+%% \begin{frame}{L'applicazione \texttt{datamanager}}
+%% \end{frame}
+%
+
+%
+%% \section{Testing}
+%% \begin{frame}{Test effettuati}
+%% %% il sistema e` stato installato in configurazione minima...
+%% \end{frame}
+%% %
+
+%% %
+%% \section{Sviluppi futuri}
+%% \begin{frame}{Sviluppi futuri}
+
+
+%% \end{frame}
 
 
 
