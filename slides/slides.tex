@@ -1,33 +1,29 @@
 \documentclass{beamer}
 
-%\usepackage{graphicx}
-%\usepackage{tikz}
-%\usepackage[absolute,overlay]{textpos}
-%\usepackage{listings}
-%\usepackage{textpos}
 \usepackage{graphicx}
 \usepackage{verbatim}
+\usepackage[mediumspace,mediumqspace,squaren,binary]{SIunits}
 
 
 %\includeonlyframes{1,2,3}
 
-
 \usetheme{Antibes}
-% Orange
-\usecolortheme[RGB={32,115,53}]{structure}
+\usecolortheme[RGB={32,115,53}]{structure} %green
 
 \usebackgroundtemplate{
-    % UniCT Logo
-    \includegraphics[width=370pt]{img/unict.jpg}
+  % UniCT Logo
+  \includegraphics[width=370pt]{img/unict.jpg}
 }
 
-\newtheorem{samplecode}{Sample Code}
+%%\newtheorem{samplecode}{Sample Code}
 
 %\setbeamercovered{transparent}
-\setbeamertemplate{footline}[frame number]{}
 \setbeamertemplate{blocks}[rounded][bg=red]
+\setbeamertemplate{footline}[frame number]{}
 
-\newcommand{\tildett}{\raise.17ex\hbox{$\scriptstyle\mathtt{\sim}$}}
+
+\newcommand{\bigtilde}{$\sim$}
+
 % Spaces
 \newcommand{\N}{\vskip 0.3 cm}
 \newcommand{\n}{\vskip 0.2 cm}
@@ -53,7 +49,6 @@ Relatore: Prof. Corrado Santoro}
 }
 \date{20 Luglio 2011}
 
-
 \begin{document}
 
 % Title Page
@@ -65,27 +60,6 @@ Relatore: Prof. Corrado Santoro}
 %% \begin{frame}
 %% \tableofcontents
 %% \end{frame}
-
-%------------------------------
-%% \begin{frame}[shrinks,label=o]{Outline}
-%% %  \tableofcontents[pausesections]
-%% %     \tableofcontents
-%%     \begin{columns}
-%%      \column{2.0in}
-%% %       \tableofcontents[sections={1}]
-%% %      \vspace{10mm}
-%%        \tableofcontents[sections={2}]
-%%       \vspace{10mm}
-%%        \tableofcontents[sections={3}]
-%%        \column{2.0in}
-%%        \tableofcontents[sections={4}] 
-%%        \vspace{10mm}
-%%       \tableofcontents[sections={5}] 
-%% %      \vspace{10mm}
-%% %       \tableofcontents[sections={5}]
-%%       \end{columns}
-%% \end{frame}
-%------------------------------
 
 \section{Introduzione}
 \begin{frame}{Monitoraggi \emph{immaturi}}
@@ -438,8 +412,7 @@ out(A) ->
 \end{frame}
 
 \section{Testing}
-\begin{frame}{Potenza prodotta vs. Corrente immessa in rete}
-%% il sistema e` stato installato in configurazione minima...
+\begin{frame}{Corrente immessa in rete vs. Potenza prodotta}
   \begin{columns}
     \column{2.5in}
     \begin{figure}[!h]
@@ -453,15 +426,30 @@ out(A) ->
         \fbox{\includegraphics[width=145pt]{img/potenza-giornaliera.png}}
       \end{center}
     \end{figure}
-    \column{1.5in}
-    blah \\
-    blah
+    %
+    \column{1.7in}
+    %
+    \textbf{Configurazione}
+    \begin{itemize}
+    \item \textbf{1} Power Transponder
+    \item \textbf{1} Gateway
+    \end{itemize}
+    %
+    \N
+    %
+%%    \textbf{Valori di picco} (14\:00hrs)
+    \textbf{Valori di picco} (1400hrs)
+    \begin{itemize}
+    \item \textbf{\bigtilde{} 120 \ampere} per fase
+    \item \textbf{\bigtilde{} 82 \kilo\watt}
+    \end{itemize}
+    
   \end{columns}
 \end{frame}
 %
 
 %
-\begin{frame}{Potenza prodotta vs. Radiazione}
+\begin{frame}{Radiazione vs. Potenza prodotta}
   \begin{columns}
     \column{2.5in}
     \begin{figure}[!h]
@@ -475,9 +463,23 @@ out(A) ->
         \fbox{\includegraphics[width=145pt]{img/potenza-giornaliera.png}}
       \end{center}
     \end{figure}
-    \column{1.5in}
-    blah \\
-    blah
+    \column{1.7in}
+    %
+    \textbf{Configurazione}
+    \begin{itemize}
+    \item \textbf{1} Power Transponder
+    \item \textbf{1} Gateway
+    \end{itemize}
+    %
+    \N
+    %
+%%    \textbf{Valori di picco} (14\:00hrs)
+    \textbf{Valori di picco} (1400hrs)
+    \begin{itemize}
+    \item \textbf{\bigtilde{} 900 \watt\per\squaremetre}
+    \item \textbf{\bigtilde{} 82 \kilo\watt}
+    \end{itemize}
+
     \end{columns}
 \end{frame}
 %
