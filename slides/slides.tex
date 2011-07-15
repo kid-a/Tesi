@@ -61,22 +61,22 @@ Relatore: Prof. Corrado Santoro}
 %% \tableofcontents
 %% \end{frame}
 
-\section{Introduzione}
-\begin{frame}{Monitoraggi \emph{immaturi}}
-  Il numero di impianti fotovoltaici \emph{grid-connected}, in Italia, \`e in costante aumento
-  \begin{itemize}
-    \item potenza installata \red{raddoppia} ogni anno
-    \item oltre \red{4 GW} al 31/12/2010
-  \end{itemize}
-  \N
-  Monitorare gli impianti fotovoltaici diventa importante per
-    \begin{itemize}
-    \item i \green{soggetti responsabili}
-    \item gli \green{installatori/manutentori}
-  \end{itemize}
-  \N  
-  "Gran parte delle soluzioni oggi in commercio mostrano caratteri di \emph{immaturit\`a}" (C. Podewils 2010)
-\end{frame}
+%% \section{Introduzione}
+%% \begin{frame}{Monitoraggi \emph{immaturi}}
+%%   Il numeri del fotovoltaico in Italia (\red{GSE}):
+%%   \begin{itemize}
+%%   \item oltre \red{4 GWp} al 31/12/2010
+%%   \item potenza installata \red{raddoppia} ogni anno
+%%   \end{itemize}
+%%   \N
+%%   Monitorare gli impianti fotovoltaici diventa importante per
+%%     \begin{itemize}
+%%     \item i \green{soggetti responsabili}
+%%     \item gli \green{installatori/manutentori}
+%%   \end{itemize}
+%%   \N  
+%%   "Gran parte delle soluzioni oggi in commercio mostrano caratteri di \emph{immaturit\`a}" (C. Podewils 2010)
+%% \end{frame}
 %
 
 %
@@ -175,64 +175,102 @@ Kolodenny \emph{et al.}, identificano le seguenti \green{classi di utenti}:
 %
 
 %
-\begin{frame}{Il Gateway}
-\begin{figure}[!h]
-  \begin{center}
-    \fbox{\includegraphics[width=60pt]{img/gw.jpg}}
-  \end{center}
-\end{figure}
-%
-\begin{itemize}
-  \item agisce da \red{concentratore dati}
-  \item \red{modem gsm} per la trasmissione dei dati
-    \begin{itemize}
-    \item via \green{sms}
-    \item via \green{FTP} \emph{over} \green{gprs}
-    \item \red{transmission interval} configurabile
+\begin{frame}{Nodi WSN}
+    \begin{columns}
+      \column{1.7in}
+  \begin{figure}[!h]
+    \begin{center}
+      \fbox{\includegraphics[width=50pt]{img/gw.jpg}}\\
+      \fbox{\includegraphics[width=50pt]{img/power-transponder.jpg}}\\
+      \fbox{\includegraphics[width=40pt]{img/string-transponder.jpg}}
+    \end{center}
+  \end{figure}
+      \column{2.5in}
+      \begin{itemize}
+      \item \red{Gateway}
+        \begin{itemize}
+        \item concentratore dati
+        \item trasmette dati via \green{gprs}/\green{sms}
+        \item effettua misure di irraggiamento
+        \end{itemize}
+        \N \N
+
+      \item \red{Power/Inverter Transponder}
+        \begin{itemize}
+        \item misura di \green{grandezze elettriche}\\
+          (corrente, tensione, PF...)
+        \end{itemize}
+        \N \N
+
+      \item \red{String Transponder}
+        \begin{itemize}
+        \item misura della \green{corrente di stringa}
+        \item sensore a \green{effetto Hall}
+        \end{itemize}
+
       \end{itemize}
-  \item \red{elemento fotovoltaico} per la ricarica della batteria
-\end{itemize}
-%
+    \end{columns}
 \end{frame}
-%
 
-%
-\begin{frame}{Il Power/Inverter Transponder}
-\begin{figure}[!h]
-  \begin{center}
-    \fbox{\includegraphics[width=60pt]{img/power-transponder.jpg}}
-  \end{center}
-\end{figure}
-%
-\begin{itemize}
-\item \red{analizzatore di rete} + \red{transponder ZigBee}
-\item misura delle grandezze elettriche \\ (corrente, potenza, power factor...)
-  \begin{itemize}
-  \item a monte del contatore bidirezionale
-  \item a valle di ogni inverter
-  \item \red{sampling interval} configurabile
-  \end{itemize}
-\end{itemize}
-%
-\end{frame}
-%
 
-%
-\begin{frame}{Lo String Transponder}
-\begin{figure}[!h]
-  \begin{center}
-    \fbox{\includegraphics[width=60pt]{img/string-transponder.jpg}}
-  \end{center}
-\end{figure}
-%
-\begin{itemize}
-\item \red{sensore di corrente} (a \emph{effetto Hall}) + \red{transponder ZigBee}
-\item misura della corrente di stringa
-  \begin{itemize}
-  \item \red{sampling interval} configurabile  
-  \end{itemize}
-  \end{itemize}
-\end{frame}
+%% \begin{frame}{Il Gateway}
+%%   \begin{figure}[!h]
+%%   \begin{center}
+%%     \fbox{\includegraphics[width=60pt]{img/gw.jpg}}
+%%   \end{center}
+%% \end{figure}
+%% %
+%% \begin{itemize}
+%%   \item agisce da \red{concentratore dati}
+%%   \item \red{modem gsm} per la trasmissione dei dati
+%%     \begin{itemize}
+%%     \item via \green{sms}
+%%     \item via \green{FTP} \emph{over} \green{gprs}
+%%     %%\item \red{transmission interval} configurabile
+%%       \end{itemize}
+%%   \item \red{elemento fotovoltaico} per la ricarica della batteria
+%% \end{itemize}
+%% %
+%% \end{frame}
+%% %
+
+%% %
+%% \begin{frame}{Il Power/Inverter Transponder}
+%% \begin{figure}[!h]
+%%   \begin{center}
+%%     \fbox{\includegraphics[width=60pt]{img/power-transponder.jpg}}
+%%   \end{center}
+%% \end{figure}
+%% %
+%% \begin{itemize}
+%% \item \red{analizzatore di rete} + \red{transponder ZigBee}
+%% \item misura delle grandezze elettriche \\ (corrente, potenza, power factor...)
+%%   \begin{itemize}
+%%   \item a monte del contatore bidirezionale
+%%   \item a valle di ogni inverter
+%%   \item \red{sampling interval} configurabile
+%%   \end{itemize}
+%% \end{itemize}
+%% %
+%% \end{frame}
+%% %
+
+%% %
+%% \begin{frame}{Lo String Transponder}
+%% \begin{figure}[!h]
+%%   \begin{center}
+%%     \fbox{\includegraphics[width=60pt]{img/string-transponder.jpg}}
+%%   \end{center}
+%% \end{figure}
+%% %
+%% \begin{itemize}
+%% \item \red{sensore di corrente} (a \emph{effetto Hall}) + \red{transponder ZigBee}
+%% \item misura della corrente di stringa
+%%   \begin{itemize}
+%%   \item \red{sampling interval} configurabile  
+%%   \end{itemize}
+%%   \end{itemize}
+%% \end{frame}
 %
 
 %
@@ -263,27 +301,27 @@ Si occupa di
 %
 
 %
-\begin{frame}[fragile]{L'applicazione \texttt{database}}
-  Possiede un unico processo \green{worker}, il quale 
-  funge da wrapper per il database \red{MySQL} in cui vengono memorizzati
-  \begin{itemize}
-  \item configurazioni degli impianti
-  \item dati di monitoraggio
-  \end{itemize}
-  %
-\begin{exampleblock}{Code snippet}
-\begin{semiverbatim}
-data_storage:\red{add_new_plant_by_structure} (
-      \green{_UniqueID} = "MyPlant", 
-      \green{_Location} = "Nowhere",
-      ...
-      \green{_Inverters} = [{{"YURAKU", "I-3000"}, 
-                    "Inverter-00", "0000-0000-0000", 
-                    [%% strings here...
-                     ]} ]).
-\end{semiverbatim}
-\end{exampleblock}  
-\end{frame}
+%% \begin{frame}[fragile]{L'applicazione \texttt{database}}
+%%   Possiede un unico processo \green{worker}, il quale 
+%%   funge da wrapper per il database \red{MySQL} in cui vengono memorizzati
+%%   \begin{itemize}
+%%   \item configurazioni degli impianti
+%%   \item dati di monitoraggio
+%%   \end{itemize}
+%%   %
+%% \begin{exampleblock}{Code snippet}
+%% \begin{semiverbatim}
+%% data_storage:\red{add_new_plant_by_structure} (
+%%       \green{_UniqueID} = "MyPlant", 
+%%       \green{_Location} = "Nowhere",
+%%       ...
+%%       \green{_Inverters} = [{{"YURAKU", "I-3000"}, 
+%%                     "Inverter-00", "0000-0000-0000", 
+%%                     [%% strings here...
+%%                      ]} ]).
+%% \end{semiverbatim}
+%% \end{exampleblock}  
+%% \end{frame}
 %
 
 %
