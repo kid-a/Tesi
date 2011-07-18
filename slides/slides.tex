@@ -80,11 +80,11 @@ Relatore: Prof. Corrado Santoro}
 %
 
 %
-\section{Il monitoraggio di impianti fotovoltaici}
+\section{Il monitoraggio degli impianti fotovoltaici}
 \subsection{Definizione del Problema}
 \begin{frame}{Obiettivi}
-Un sistema di monitoraggio effettua la \green{raccolta} e \green{l'integrazione} dei  \red{dati rilevanti} di un impianto al fine di
-determinarne:
+  Un sistema di monitoraggio effettua la \green{raccolta} e \green{l'integrazione} dei  \red{dati rilevanti} di un impianto al fine di
+  determinarne:
 %
 \begin{itemize}
 \item lo stato operativo
@@ -159,8 +159,11 @@ Kolodenny \emph{et al.}, identificano le seguenti \green{classi di utenti}:
   \item \red{Wireless Sensor Network} (WSN) ZigBee-based
     \begin{itemize}
     \item bassi costi
-    \item no cablaggi aggiuntivi
-    \item rete autoconfigurante
+    \item facilit\`a di installazione
+      \begin{itemize}
+      \item no cablaggi aggiuntivi
+      \item rete autoconfigurante
+      \end{itemize}
     \end{itemize}
     \N
   \item previsti tre tipi di nodi
@@ -282,7 +285,7 @@ Si occupa di
 \item \green{gestire i flussi informativi} generati dai gateway
 \item \green{elaborare} e \green{memorizzare} i dati di campo 
 \item generare \green{report} e \green{allarmi}
-\item fornire \green{accesso ai dati}
+\item fornire \green{accesso ai dati} mediante \green{web services RESTful}
 \end{itemize}
 %
 \N
@@ -347,7 +350,7 @@ Gestisce i flussi informativi generati da ogni impianto
   \item un \texttt{filter}
   \item un processo \red{endpoint} (\texttt{file\_poller}, \texttt{sms\_manager})
   \end{itemize}
-\item politiche di \red{riavvio} dei supervisor
+%%\item politiche di \red{riavvio} dei supervisor
 \end{itemize}
 %
 \end{frame}
@@ -424,66 +427,66 @@ Due attivit\`a concorrenti:
 \end{frame}
 
 
-\begin{frame}[fragile]{Web Services}
-  \begin{itemize}
-  \item basati su \red{Yaws}
-  \item \red{RESTful}
-  \end{itemize}
-%
-  \begin{exampleblock}{Servizio \texttt{get\_plants}}
-    \begin{semiverbatim}
-      \begin{small}
-<erl>
-out(A) ->
- \{ok, \blue{PlantList}\} = \red{data_storage:get_plants}(),
-  Reply =
-    \red{xml_translator:make_plant_list_response} (\blue{PlantList}),
-  {html, \blue{Reply}}.
-</erl>
+%% \begin{frame}[fragile]{Web Services}
+%%   \begin{itemize}
+%%   \item basati su \red{Yaws}
+%%   \item \red{RESTful}
+%%   \end{itemize}
+%% %
+%%   \begin{exampleblock}{Servizio \texttt{get\_plants}}
+%%     \begin{semiverbatim}
+%%       \begin{small}
+%% <erl>
+%% out(A) ->
+%%  \{ok, \blue{PlantList}\} = \red{data_storage:get_plants}(),
+%%   Reply =
+%%     \red{xml_translator:make_plant_list_response} (\blue{PlantList}),
+%%   {html, \blue{Reply}}.
+%% </erl>
 
-<\purple{plant_list_response}>
-  <\purple{plant} \navy{id}="1" \navy{unique_id}="plant-1" \navy{customer_id}="0" ... />
-</\purple{plant_list_response}>
-      \end{small}
-    \end{semiverbatim}
-  \end{exampleblock}
-\end{frame}
+%% <\purple{plant_list_response}>
+%%   <\purple{plant} \navy{id}="1" \navy{unique_id}="plant-1" \navy{customer_id}="0" ... />
+%% </\purple{plant_list_response}>
+%%       \end{small}
+%%     \end{semiverbatim}
+%%   \end{exampleblock}
+%% \end{frame}
 
 \section{Testing}
-\begin{frame}{Corrente immessa in rete vs. Potenza prodotta}
-  \begin{columns}
-    \column{2.5in}
-    \begin{figure}[!h]
-      \begin{center}
-        \fbox{\includegraphics[width=145pt]{img/current-power-transponder.png}}
-      \end{center}
-    \end{figure}
-    %   
-    \begin{figure}[!h]
-      \begin{center}
-        \fbox{\includegraphics[width=145pt]{img/potenza-giornaliera.png}}
-      \end{center}
-    \end{figure}
-    %
-    \column{1.7in}
-    %
-    \textbf{Configurazione}
-    \begin{itemize}
-    \item \textbf{1} Power Transponder
-    \item \textbf{1} Gateway
-    \end{itemize}
-    %
-    \N
-    %
-%%    \textbf{Valori di picco} (14\:00hrs)
-    \textbf{Valori di picco} (1400hrs)
-    \begin{itemize}
-    \item \textbf{\bigtilde{} 120 \ampere} per fase
-    \item \textbf{\bigtilde{} 82 \kilo\watt}
-    \end{itemize}
+%% \begin{frame}{Corrente immessa in rete vs. Potenza prodotta}
+%%   \begin{columns}
+%%     \column{2.5in}
+%%     \begin{figure}[!h]
+%%       \begin{center}
+%%         \fbox{\includegraphics[width=145pt]{img/current-power-transponder.png}}
+%%       \end{center}
+%%     \end{figure}
+%%     %   
+%%     \begin{figure}[!h]
+%%       \begin{center}
+%%         \fbox{\includegraphics[width=145pt]{img/potenza-giornaliera.png}}
+%%       \end{center}
+%%     \end{figure}
+%%     %
+%%     \column{1.7in}
+%%     %
+%%     \textbf{Configurazione}
+%%     \begin{itemize}
+%%     \item \textbf{1} Power Transponder
+%%     \item \textbf{1} Gateway
+%%     \end{itemize}
+%%     %
+%%     \N
+%%     %
+%% %%    \textbf{Valori di picco} (14\:00hrs)
+%%     \textbf{Valori di picco} (1400hrs)
+%%     \begin{itemize}
+%%     \item \textbf{\bigtilde{} 120 \ampere} per fase
+%%     \item \textbf{\bigtilde{} 82 \kilo\watt}
+%%     \end{itemize}
     
-  \end{columns}
-\end{frame}
+%%   \end{columns}
+%% \end{frame}
 %
 
 %
